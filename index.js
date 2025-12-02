@@ -7,6 +7,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const helmet = require("helmet");
 const csrf = require("csurf");
+const expressLayouts = require("express-ejs-layouts");
 
 const publicRoutes = require("./routes/publicRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -17,6 +18,10 @@ const PORT = process.env.PORT || 3000;
 // View engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+// Layouts
+app.use(expressLayouts);
+app.set("layout", "layouts/main");
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
