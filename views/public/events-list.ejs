@@ -1,0 +1,39 @@
+<!-- views/public/events-list.ejs -->
+<% layout("layouts/main") %>
+
+<section class="section">
+  <h1>Events</h1>
+  <p class="text-muted">
+    Explore upcoming Ella Rises summits, workshops, performances and community events.
+  </p>
+</section>
+
+<section class="section section--tight">
+  <div class="grid grid-3">
+    <% if (events && events.length) { %>
+      <% events.forEach(event => { %>
+        <article class="card card-event card--hoverable">
+          <div>
+            <span class="badge badge--accent"><%= event.EventType %></span>
+            <h3 class="mt-1"><%= event.EventName %></h3>
+            <p class="text-muted">
+              <%= event.EventDateStartFormatted %> · <%= event.EventLocation %>
+            </p>
+          </div>
+          <p class="mt-1 text-muted"><%= event.EventDescriptionShort %></p>
+          <div class="mt-1">
+            <a href="/events/<%= event.EventDetailsID %>" class="btn btn-outline">
+              View details
+            </a>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <div class="card">
+        <p class="text-muted">
+          Events will be listed here as the Ella Rises calendar is added.
+        </p>
+      </div>
+    <% } %>
+  </div>
+</section>

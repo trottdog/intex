@@ -1,0 +1,36 @@
+<!-- views/partials/_header.ejs -->
+<div class="brand">
+  <div class="brand-logo">
+    <img src="/images/logo.png" alt="Ella Rises logo" />
+  </div>
+  <div class="brand-text">Ella Rises</div>
+</div>
+
+<nav class="nav">
+  <div class="nav-group">
+    <a href="/" class="nav-link <%= activeNav === 'home' ? 'nav-link--active' : '' %>">Home</a>
+    <a href="/about" class="nav-link <%= activeNav === 'about' ? 'nav-link--active' : '' %>">About</a>
+    <a href="/programs" class="nav-link <%= activeNav === 'programs' ? 'nav-link--active' : '' %>">Programs</a>
+    <a href="/events" class="nav-link <%= activeNav === 'events' ? 'nav-link--active' : '' %>">Events</a>
+    <a href="/get-involved" class="nav-link <%= activeNav === 'get-involved' ? 'nav-link--active' : '' %>">Get Involved</a>
+  </div>
+
+  <div class="nav-group">
+    <% if (user && user.Role === 'user') { %>
+      <a href="/my-journey" class="nav-link nav-trigger <%= activeNav === 'my-journey' ? 'nav-link--active' : '' %>">
+        My Journey
+      </a>
+    <% } else if (user && user.Role === 'admin') { %>
+      <a href="/manage" class="nav-link nav-trigger <%= activeNav === 'manage' ? 'nav-link--active' : '' %>">
+        Manage
+      </a>
+    <% } else { %>
+      <a href="/login" class="nav-link <%= activeNav === 'login' ? 'nav-link--active' : '' %>">Login</a>
+      <a href="/signup" class="nav-link <%= activeNav === 'signup' ? 'nav-link--active' : '' %>">Sign Up</a>
+    <% } %>
+
+    <a href="/donate" class="btn btn-primary" style="margin-left: 0.5rem;">
+      Donate
+    </a>
+  </div>
+</nav>

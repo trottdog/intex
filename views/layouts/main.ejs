@@ -1,3 +1,4 @@
+<!-- views/layouts/main.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +6,7 @@
   </head>
   <body>
     <header class="site-header">
-      <div class="container">
+      <div class="container site-header-inner">
         <%- include("../partials/_header") %>
       </div>
     </header>
@@ -22,5 +23,8 @@
         <%- include("../partials/_footer") %>
       </div>
     </footer>
+
+    <script src="/js/main.js" defer></script>
   </body>
 </html>
+

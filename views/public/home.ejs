@@ -1,0 +1,137 @@
+<!-- views/public/home.ejs -->
+<% layout("layouts/main") %>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="hero-kicker">Latina youth. Higher education. Heritage.</p>
+      <h1 class="hero-title">
+        Helping girls rise with art, STEM and culture.
+      </h1>
+      <p>
+        Ella Rises walks with Latina girls as they grow in confidence, embrace
+        their heritage, and prepare for college and meaningful careers through
+        mariachi, ballet folklorico, STEAM workshops and mentoring.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/donate" class="btn btn-primary">Donate</a>
+        <a href="/programs" class="btn btn-outline">Explore Programs</a>
+      </div>
+    </div>
+
+    <div class="card card--hoverable">
+      <h3>What is the Ella Rises experience?</h3>
+      <p class="text-muted">
+        A joyful blend of art, STEM, and educational exploration that builds
+        confidence in each girl's worth, voice, and future.
+      </p>
+
+      <div class="grid">
+        <div>
+          <span class="badge badge--primary">Summits</span>
+          <p class="mt-1 text-muted">
+            Day experiences that mix hands on STEM, creativity and college tours.
+          </p>
+        </div>
+        <div>
+          <span class="badge badge--accent">Year round</span>
+          <p class="mt-1 text-muted">
+            Mariachi, ballet folklorico and STEAM programs during the school year.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="grid grid-3">
+    <div class="card card--hoverable">
+      <span class="badge badge--primary">Programs</span>
+      <h3 class="mt-1">Mariachi & Ballet Folklorico</h3>
+      <p class="text-muted">
+        Girls learn traditional music and dance, connect with their culture, and
+        grow comfortable performing and leading.
+      </p>
+      <a href="/programs" class="btn btn-ghost">Learn more</a>
+    </div>
+
+    <div class="card card--hoverable">
+      <span class="badge badge--accent">STEM & Education</span>
+      <h3 class="mt-1">STEAM Workshops</h3>
+      <p class="text-muted">
+        High impact workshops with Latina mentors that demystify college, STEM
+        careers and the path beyond high school.
+      </p>
+      <a href="/programs" class="btn btn-ghost">View workshops</a>
+    </div>
+
+    <div class="card card--hoverable">
+      <span class="badge badge--neutral">Community</span>
+      <h3 class="mt-1">Mentors & Families</h3>
+      <p class="text-muted">
+        Ella Rises partners with parents, mentors and community leaders to create
+        a network of support around each girl.
+      </p>
+      <a href="/get-involved" class="btn btn-ghost">Get involved</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <h2>Upcoming events</h2>
+  <p class="text-muted">
+    Here is a glimpse of what is coming next. In the live app, this will pull
+    directly from the events database.
+  </p>
+
+  <div class="grid grid-3 mt-2">
+    <% if (events && events.length) { %>
+      <% events.forEach(event => { %>
+        <article class="card card-event card--hoverable">
+          <div>
+            <span class="badge badge--accent"><%= event.EventType %></span>
+            <h3 class="mt-1"><%= event.EventName %></h3>
+            <p class="text-muted">
+              <%= event.EventDateStartFormatted %> · <%= event.EventLocation %>
+            </p>
+          </div>
+          <div class="mt-1">
+            <p class="text-muted"><%= event.EventDescriptionShort %></p>
+          </div>
+          <div class="mt-1">
+            <a href="/events/<%= event.EventDetailsID %>" class="btn btn-outline">
+              View details
+            </a>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <div class="card">
+        <p class="text-muted">
+          Upcoming events will appear here once they are added by the Ella Rises team.
+        </p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="card">
+    <div class="grid grid-2">
+      <div>
+        <h2>Impact in action</h2>
+        <p class="text-muted">
+          Ella Rises helps Latina youth continue their education, step into
+          leadership and honor their cultural roots. The admin dashboard will
+          highlight graduation, college pathways and participation over time.
+        </p>
+        <a href="/impact" class="btn btn-outline mt-1">View impact dashboard</a>
+      </div>
+      <div>
+        <canvas id="impactChart" aria-label="Ella Rises impact chart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
