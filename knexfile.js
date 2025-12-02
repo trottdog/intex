@@ -7,7 +7,7 @@ module.exports = {
       host: process.env.PGHOST || "localhost",
       user: process.env.PGUSER || "postgres",
       password: process.env.PGPASSWORD || "",
-      database: process.env.PGDATABASE || "assignment_3",
+      database: process.env.PGDATABASE || "intex",
       port: process.env.PGPORT || 5432
     },
     migrations: {

@@ -1,0 +1,721 @@
+/* ===============================
+   Global Theme: Ella Rises Web App
+   =============================== */
+
+/* 1. Reset & Base
+   ------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1f2933;
+  background-color: #fff9f6;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reduce animation for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 2. CSS Variables (Theme Tokens)
+   ------------------------------------------------------------------ */
+
+:root {
+  /* Core palette: soft, warm, uplifting */
+  --color-bg: #fff9f6;              /* app background */
+  --color-bg-alt: #ffece2;          /* subtle sections */
+  --color-surface: #ffffff;         /* cards, panels */
+  --color-surface-soft: #ffeef2;    /* gentle hero panels */
+
+  --color-primary: #e77b7a;         /* main accent (Ella pink/red) */
+  --color-primary-soft: #fdd7da;    /* light variant */
+  --color-primary-dark: #b24a4b;
+
+  --color-accent: #ffb86b;          /* warm golden accent */
+  --color-accent-soft: #ffe6bf;
+
+  --color-teal: #1f9f9c;            /* secondary accent for STEAM / links */
+
+  --color-text: #1f2933;
+  --color-text-muted: #6b7280;
+  --color-border-subtle: #f3d2cd;
+  --color-border-strong: #d08a7f;
+
+  --color-success: #15803d;
+  --color-warning: #f97316;
+  --color-danger: #b91c1c;
+  --color-info: #2563eb;
+
+  --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 9999px;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  --font-heading: "Playfair Display", "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --transition-fast: 150ms ease-out;
+  --transition-med: 220ms ease-out;
+}
+
+/* 3. Typography
+   ------------------------------------------------------------------ */
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin: 0 0 0.5em;
+  color: #111827;
+}
+
+h1 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  letter-spacing: 0.03em;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+/* Subheadings / Eyebrow text */
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--color-primary-dark);
+}
+
+/* 4. Layout Helpers
+   ------------------------------------------------------------------ */
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.section {
+  padding: var(--spacing-2xl) 0;
+}
+
+.section--alt {
+  background: linear-gradient(
+    135deg,
+    rgba(253, 215, 218, 0.7),
+    rgba(255, 236, 226, 0.9)
+  );
+}
+
+/* Simple responsive grid for dashboards, cards, etc. */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* 5. Links & Buttons
+   ------------------------------------------------------------------ */
+
+a {
+  color: var(--color-teal);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Accessible focus outline */
+:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.9);
+  outline-offset: 3px;
+}
+
+/* Base button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.3rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-med),
+    color var(--transition-med),
+    box-shadow var(--transition-med),
+    transform var(--transition-med),
+    border-color var(--transition-med);
+  text-decoration: none;
+}
+
+/* Primary CTA: enroll, donate, save, etc. */
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
+  color: #ffffff;
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-accent)
+  );
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(148, 27, 35, 0.25);
+}
+
+/* Subtle secondary button */
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary-soft);
+  background-image: linear-gradient(
+    135deg,
+    rgba(253, 215, 218, 0.4),
+    rgba(255, 248, 242, 0.9)
+  );
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+/* Tag / pill */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+/* 6. Navigation
+   ------------------------------------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 249, 246, 0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(243, 210, 205, 0.8);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background-color: #fdd7da;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 0.15rem;
+  color: var(--color-text-muted);
+}
+
+.nav-link:hover,
+.nav-link--active {
+  color: var(--color-primary-dark);
+}
+
+.nav-link--active::after,
+.nav-link:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
+}
+
+/* Mobile nav adjustments */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* you can swap this for a mobile menu later */
+  }
+}
+
+/* 7. Hero & Section Elements
+   ------------------------------------------------------------------ */
+
+.hero {
+  padding: var(--spacing-2xl) 0 var(--spacing-xl);
+}
+
+.hero-inner {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.hero-copy {
+  max-width: 32rem;
+}
+
+.hero-kicker {
+  margin-bottom: 0.75rem;
+}
+
+.hero-title {
+  margin-bottom: 0.75rem;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  max-width: 30rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.hero-panel {
+  background: radial-gradient(circle at top left, #ffe6f0 0, #ffffff 40%);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Larger layout on desktop */
+@media (min-width: 900px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+/* 8. Cards & Panels (for dashboard, programs, events, etc.)
+   ------------------------------------------------------------------ */
+
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(243, 210, 205, 0.6);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+  transition:
+    transform var(--transition-med),
+    box-shadow var(--transition-med),
+    border-color var(--transition-med);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(224, 139, 132, 0.7);
+}
+
+.card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.card-body {
+  font-size: 0.95rem;
+}
+
+.card-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 9. Forms (Enroll, Login, Event Creation, etc.)
+   ------------------------------------------------------------------ */
+
+form {
+  max-width: 640px;
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  font: inherit;
+  color: inherit;
+  background-color: #fffdfc;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 1px rgba(31, 159, 156, 0.4);
+  outline: none;
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.form-error {
+  font-size: 0.8rem;
+  color: var(--color-danger);
+}
+
+/* 10. Status chips (for registrations, attendance, etc.)
+   ------------------------------------------------------------------ */
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.18rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.status-chip--success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-chip--warning {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+.status-chip--danger {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-chip--info {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* 11. Alerts / Flash messages
+   ------------------------------------------------------------------ */
+
+.alert {
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid transparent;
+}
+
+.alert-success {
+  background-color: #ecfdf3;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.alert-info {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* 12. Tables (for participant list, events, etc.)
+   ------------------------------------------------------------------ */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table thead {
+  background-color: #fff1eb;
+}
+
+.table th,
+.table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #f1dfda;
+}
+
+.table th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.table tr:hover {
+  background-color: #fff7f3;
+}
+
+/* 13. Footer
+   ------------------------------------------------------------------ */
+
+.site-footer {
+  border-top: 1px solid rgba(243, 210, 205, 0.8);
+  padding: var(--spacing-lg) 0;
+  background-color: #fff7f2;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* 14. Utility Classes
+   ------------------------------------------------------------------ */
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+.mt-sm {
+  margin-top: var(--spacing-sm);
+}
+.mt-md {
+  margin-top: var(--spacing-md);
+}
+.mt-lg {
+  margin-top: var(--spacing-lg);
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-sm {
+  margin-bottom: var(--spacing-sm);
+}
+.mb-md {
+  margin-bottom: var(--spacing-md);
+}
+.mb-lg {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Screen-reader only text (for ADA-friendly labels, descriptions) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* 15. Chart.js Canvas Container
+   ------------------------------------------------------------------ */
+
+.chart-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(243, 210, 205, 0.6);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+}
+
+.chart-card-title {
+  font-size: 0.98rem;
+  margin-bottom: 0.4rem;
+}
+
+.chart-card-subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  min-height: 220px;
+}
