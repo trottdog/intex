@@ -1,38 +1,77 @@
 <!-- views/partials/_header.ejs -->
+<%
+  const currentUser = typeof user !== "undefined" && user ? user : null;
+  const currentNav = typeof activeNav !== "undefined" ? activeNav : "";
+%>
 
-<% const currentUser = typeof user !== "undefined" && user ? user : null; %>
-
-<div class="brand">
+<a href="/" class="brand">
   <div class="brand-logo">
     <img src="/images/logo.png" alt="Ella Rises logo" />
   </div>
-  <div class="brand-text">Ella Rises</div>
-</div>
+  <span class="brand-text">Ella Rises</span>
+</a>
 
-<nav class="nav">
+<nav class="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-group">
-    <a href="/" class="nav-link <%= activeNav === 'home' ? 'nav-link--active' : '' %>">Home</a>
-    <a href="/about" class="nav-link <%= activeNav === 'about' ? 'nav-link--active' : '' %>">About</a>
-    <a href="/programs" class="nav-link <%= activeNav === 'programs' ? 'nav-link--active' : '' %>">Programs</a>
-    <a href="/events" class="nav-link <%= activeNav === 'events' ? 'nav-link--active' : '' %>">Events</a>
-    <a href="/get-involved" class="nav-link <%= activeNav === 'get-involved' ? 'nav-link--active' : '' %>">Get Involved</a>
+    <a href="/" class="nav-link <%= currentNav === 'home' ? 'nav-link--active' : '' %>">
+      Home
+    </a>
+    
+    <!-- About with Dropdown -->
+    <div class="nav-item">
+      <a href="/about" class="nav-link <%= currentNav === 'about' ? 'nav-link--active' : '' %>">
+        About
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </a>
+      <div class="nav-dropdown">
+        <a href="/about#mission" class="nav-dropdown-link">Our Mission</a>
+        <a href="/about#team" class="nav-dropdown-link">Meet the Team</a>
+      </div>
+    </div>
+    
+    <a href="/programs" class="nav-link <%= currentNav === 'programs' ? 'nav-link--active' : '' %>">
+      Programs
+    </a>
+    
+    <a href="/events" class="nav-link <%= currentNav === 'events' ? 'nav-link--active' : '' %>">
+      Events
+    </a>
+    
+    <a href="/get-involved" class="nav-link <%= currentNav === 'get-involved' ? 'nav-link--active' : '' %>">
+      Get Involved
+    </a>
+    
+    <a href="/impact" class="nav-link <%= currentNav === 'impact' ? 'nav-link--active' : '' %>">
+      Impact
+    </a>
   </div>
 
-  <div class="nav-group">
+  <div class="nav-auth">
     <% if (currentUser && currentUser.role === 'user') { %>
-      <a href="/my-journey" class="nav-link <%= activeNav === 'my-journey' ? 'nav-link--active' : '' %>">
+      <a href="/my-journey" class="nav-link <%= currentNav === 'my-journey' ? 'nav-link--active' : '' %>">
         My Journey
       </a>
+      <form action="/logout" method="POST" style="display: inline;">
+        <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
+        <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+      </form>
     <% } else if (currentUser && currentUser.role === 'admin') { %>
-      <a href="/manage" class="nav-link <%= activeNav === 'manage' ? 'nav-link--active' : '' %>">
+      <a href="/manage" class="nav-link <%= currentNav === 'manage' ? 'nav-link--active' : '' %>">
         Manage
       </a>
+      <form action="/logout" method="POST" style="display: inline;">
+        <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
+        <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+      </form>
     <% } else { %>
-      <a href="/login" class="nav-link <%= activeNav === 'login' ? 'nav-link--active' : '' %>">Login</a>
-      <a href="/signup" class="nav-link <%= activeNav === 'signup' ? 'nav-link--active' : '' %>">Sign Up</a>
+      <a href="/login" class="nav-link <%= currentNav === 'login' ? 'nav-link--active' : '' %>">
+        Login
+      </a>
     <% } %>
-
-    <a href="/donate" class="btn btn-primary" style="margin-left: 0.25rem;">
+    
+    <a href="/donate" class="btn btn-primary btn-sm">
       Donate
     </a>
   </div>

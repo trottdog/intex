@@ -1,84 +1,349 @@
 <!-- views/public/about.ejs -->
 
-<section class="section">
-  <h1>About Ella Rises</h1>
-  <p class="text-muted">
-    Ella Rises exists to help Latina girls see their potential, stay on the path
-    to higher education and feel proud of who they are and where they come from.
-  </p>
-</section>
-
-<section class="section section--tight">
-  <div class="card">
-    <h2>Our Mission</h2>
-    <p>
-      Ella Rises empowers young women to pursue higher education through
-      multicultural programs rooted in mariachi, ballet folklorico and STEAM.
-      Through hands on experiences and Latina mentors, girls build confidence,
-      discover new pathways and learn to value their spiritual and cultural
-      heritage.
-    </p>
-    <p>
-      As girls move through the Ella Rises experience, they are encouraged to
-      envision themselves in college, in meaningful careers and as leaders in
-      their families and communities.
-    </p>
+<!-- Hero Section -->
+<section class="hero" style="padding-bottom: 3rem;">
+  <div class="container">
+    <div class="hero-content" style="max-width: 800px;">
+      <span class="hero-kicker">About Us</span>
+      <h1 class="hero-title">
+        Elevating young women through culture, art & education
+      </h1>
+      <p class="hero-subtitle" style="max-width: 650px;">
+        Ella Rises was born from a deep connection to heritage and a vision 
+        to help Latina girls see their potential, stay on the path to higher education, 
+        and feel proud of who they are and where they come from.
+      </p>
+    </div>
   </div>
 </section>
 
-<section class="section section--tight">
-  <h2>Meet the Team</h2>
-
-  <div class="grid grid-2 mt-2">
-    <!-- Nadia -->
-    <article class="card card--hoverable">
-      <div class="grid" style="grid-template-columns: 120px minmax(0, 1fr); gap: 1rem;">
-        <div>
-          <img src="/images/Nadia.avif" alt="Portrait of Nadia Cates" style="border-radius: 999px;" />
-        </div>
-        <div>
-          <h3 class="mt-0">Nadia Cates</h3>
-          <p class="text-muted" style="font-size: 0.9rem;">Founder and Executive Director</p>
-          <p class="text-muted">
-            Nadia grew up between the borderlands of Mexico and Southern California,
-            the oldest of three daughters in a close, faith centered family. She
-            studied Human Development at Brigham Young University and later trained
-            in a Mexican culinary institute in Mexico City.
-          </p>
-          <p class="text-muted">
-            While living in Mexico City, she reconnected with her heritage in a new
-            way and began to see how culture, faith and education could come
-            together to lift young women. That vision became Ella Rises. Nadia now
-            serves as Creative and Executive Director, guiding the programs and
-            experiences that help girls rise with clarity, confidence and purpose.
-          </p>
-        </div>
-      </div>
-    </article>
-
-    <!-- Claudia -->
-    <article class="card card--hoverable">
-      <div class="grid" style="grid-template-columns: 120px minmax(0, 1fr); gap: 1rem;">
-        <div>
-          <img src="/images/ClaudiaBarillas.avif" alt="Portrait of Claudia Barillas" style="border-radius: 999px;" />
-        </div>
-        <div>
-          <h3 class="mt-0">Claudia Barillas</h3>
-          <p class="text-muted" style="font-size: 0.9rem;">Program Director</p>
-          <p class="text-muted">
-            Claudia was raised in Los Angeles after her family emigrated from
-            Michoacán, Mexico. She holds a degree in Social Work from Cal State L.A.
-            and a Master of Public Administration from Brigham Young University.
-          </p>
-          <p class="text-muted">
-            For more than twenty years she has worked in substance recovery, mental
-            health, human services and community advocacy. She currently serves as
-            a Human Services Director in Utah County and brings that experience to
-            Ella Rises as Program Director, helping youth honor their identity,
-            build strong families and pursue their dreams.
-          </p>
+<!-- Our Mission Section -->
+<section id="mission" class="section" style="scroll-margin-top: 100px;">
+  <div class="container">
+    <div class="grid" style="grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center;">
+      <div>
+        <span class="badge badge--primary mb-2">Our Mission</span>
+        <h2 class="heading-decorated">Empowering the rising generation</h2>
+        <p class="text-muted mt-4" style="font-size: var(--text-lg); line-height: 1.8;">
+          <strong style="color: var(--color-text);">Ella Rises</strong> empowers young women 
+          to pursue higher education through high-impact multicultural activities focused on 
+          mariachi, ballet folklorico, and STEAM.
+        </p>
+        <p class="text-muted" style="line-height: 1.8;">
+          Through hands-on experiences and Latina mentors, girls build confidence, 
+          discover new pathways, and learn to value their spiritual and cultural heritage. 
+          As girls move through the Ella Rises experience, they are encouraged to envision 
+          themselves in college, in meaningful careers, and as leaders in their families and communities.
+        </p>
+        <p class="text-muted" style="line-height: 1.8;">
+          We saw a need in our community for girls to identify who they really are, 
+          to reconnect with their roots, and see where they fit into the community. 
+          Our goal is to elevate the legacy of the young women we serve.
+        </p>
+        
+        <div class="flex" style="gap: 1rem; margin-top: 2rem;">
+          <a href="/programs" class="btn btn-primary">Explore Programs</a>
+          <a href="/donate" class="btn btn-outline">Support Us</a>
         </div>
       </div>
-    </article>
+      
+      <div style="position: relative;">
+        <!-- Decorative flower -->
+        <div class="flower-decor flower-3" style="top: -30px; right: -20px;">
+          <img src="/images/flowers/flower3.avif" alt="" aria-hidden="true" />
+        </div>
+        
+        <div class="card card--featured" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem;">Our Values</h3>
+          
+          <div style="display: grid; gap: 1.5rem;">
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Cultural Pride</h4>
+                <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">
+                  We celebrate and preserve Latino heritage through music, dance, and tradition.
+                </p>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--color-accent-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Education First</h4>
+                <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">
+                  We guide girls toward higher education and meaningful career paths.
+                </p>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(153, 183, 198, 0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Community & Mentorship</h4>
+                <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">
+                  We connect girls with Latina role models and supportive community.
+                </p>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(151, 142, 196, 0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Confidence & Growth</h4>
+                <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">
+                  We help girls discover their worth, voice, and future potential.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- Partnership Section -->
+<section class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(154, 181, 157, 0.1) 50%, transparent 100%);">
+  <div class="container">
+    <div class="text-center" style="max-width: 700px; margin: 0 auto;">
+      <span class="badge badge--accent mb-2">Our Partners</span>
+      <h2>Working Together</h2>
+      <p class="text-muted mt-3">
+        Ella Rises collaborates with universities, community organizations, and local leaders 
+        to provide comprehensive support for our participants.
+      </p>
+      
+      <div class="flex-center" style="gap: 3rem; margin-top: 3rem; flex-wrap: wrap;">
+        <div class="text-center">
+          <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--color-primary-dark);">UVU</div>
+          <div class="text-muted" style="font-size: var(--text-sm);">Utah Valley University</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--color-accent-dark);">BYU</div>
+          <div class="text-muted" style="font-size: var(--text-sm);">Brigham Young University</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: var(--text-xl); font-weight: 700; color: var(--color-dusty-blue);">Thanksgiving Point</div>
+          <div class="text-muted" style="font-size: var(--text-sm);">STEM Partner</div>
+        </div>
+        <div class="text-center">
+          <div style="font-size: var(--text-xl); font-weight: 700; color: var(--color-lavender);">United Way</div>
+          <div class="text-muted" style="font-size: var(--text-sm);">Utah County</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Meet the Team Section -->
+<section id="team" class="team-section" style="scroll-margin-top: 100px;">
+  <div class="container">
+    <div class="team-header">
+      <span class="badge badge--primary mb-2">Meet the Team</span>
+      <h2 class="heading-decorated">The people behind Ella Rises</h2>
+      <p class="text-muted mt-3">
+        Our leadership team brings together diverse experiences united by a passion 
+        for empowering Latina youth.
+      </p>
+    </div>
+    
+    <!-- Founders -->
+    <div class="founders-grid">
+      <!-- Nadia -->
+      <article class="founder-card">
+        <div class="founder-photo">
+          <img src="/images/Nadia.avif" alt="Nadia Cates, Founder and Executive Director" />
+        </div>
+        <div class="founder-info">
+          <h3>Nadia Cates</h3>
+          <p class="founder-role">Founder & Executive Director</p>
+          <p class="founder-bio">
+            Nadia was born in Tijuana, Mexico and grew up in Southern California. 
+            She studied Human Development at Brigham Young University and later trained 
+            at a Mexican culinary institute in Mexico City.
+          </p>
+          <p class="founder-bio">
+            While living in Mexico City, she reconnected with her heritage in a new way 
+            and began to see how culture, faith, and education could come together to lift 
+            young women. That vision became Ella Rises.
+          </p>
+        </div>
+      </article>
+      
+      <!-- Claudia -->
+      <article class="founder-card">
+        <div class="founder-photo">
+          <img src="/images/ClaudiaBarillas.avif" alt="Claudia Barillas, Program Director" />
+        </div>
+        <div class="founder-info">
+          <h3>Claudia Barillas</h3>
+          <p class="founder-role">Program Director</p>
+          <p class="founder-bio">
+            Claudia was raised in Los Angeles after her family emigrated from Michoacán, Mexico. 
+            She holds a degree in Social Work from Cal State L.A. and a Master of Public 
+            Administration from Brigham Young University.
+          </p>
+          <p class="founder-bio">
+            For more than twenty years she has worked in substance recovery, mental health, 
+            human services, and community advocacy. She brings this experience to Ella Rises 
+            as Program Director.
+          </p>
+        </div>
+      </article>
+    </div>
+    
+    <!-- Board of Directors -->
+    <div class="text-center mt-5 mb-4">
+      <h3>Board of Directors</h3>
+      <p class="text-muted">
+        Dedicated leaders guiding Ella Rises toward our mission.
+      </p>
+    </div>
+    
+    <div class="board-grid stagger-children">
+      <!-- Emma Gaupo -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/EmmaGaupo.avif" alt="Emma Gaupo" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Emma Gaupo</h4>
+          <p class="board-role">Chair of the Board</p>
+        </div>
+      </article>
+      
+      <!-- Dennia Gayle -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/DenniaGayle.avif" alt="Dennia Gayle" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Dennia Gayle</h4>
+          <p class="board-role">Vice Chair</p>
+        </div>
+      </article>
+      
+      <!-- Bert Barillas -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/BertBarillas.avif" alt="Bert Barillas" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Bert Barillas</h4>
+          <p class="board-role">Secretary</p>
+        </div>
+      </article>
+      
+      <!-- Rogelio Osuna -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/RogelioOsuna.avif" alt="Rogelio Osuna" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Rogelio Osuna</h4>
+          <p class="board-role">Treasurer</p>
+        </div>
+      </article>
+      
+      <!-- Zachariah Parry -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/ZachariahParry.avif" alt="Zachariah Parry" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Zachariah Parry</h4>
+          <p class="board-role">Board Member</p>
+        </div>
+      </article>
+      
+      <!-- Shawn Cates -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/ShawnCates.avif" alt="Shawn Cates" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Shawn Cates</h4>
+          <p class="board-role">Board Member</p>
+        </div>
+      </article>
+      
+      <!-- Kathy Larrabee -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/KathyLarrabee.avif" alt="Kathy Larrabee" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Kathy Larrabee</h4>
+          <p class="board-role">Board Member</p>
+        </div>
+      </article>
+      
+      <!-- Rick Heizer -->
+      <article class="board-card">
+        <div class="board-photo">
+          <img src="/images/board_members/RickHeizer.avif" alt="Rick Heizer" />
+        </div>
+        <div class="board-info">
+          <h4 class="board-name">Rick Heizer</h4>
+          <p class="board-role">Board Member</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section" style="background: var(--color-primary-soft); padding: 4rem 0;">
+  <div class="container">
+    <div class="text-center" style="max-width: 600px; margin: 0 auto;">
+      <h2>Join Our Community</h2>
+      <p class="text-muted mt-2">
+        Whether you want to enroll your daughter, volunteer your time, 
+        or support our mission through donations, we'd love to hear from you.
+      </p>
+      <div class="flex-center" style="gap: 1rem; margin-top: 2rem;">
+        <a href="/get-involved" class="btn btn-primary btn-lg">Get Involved</a>
+        <a href="mailto:nadia@ellarises.org" class="btn btn-outline btn-lg">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Smooth scroll for anchor links
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  });
+</script>

@@ -11,20 +11,15 @@
       </div>
     </header>
 
-    <main>
+    <main style="padding-top: var(--header-height);">
       <div class="container">
         <%- include("../partials/_flash") %>
-        <%- body %>
       </div>
+      <%- body %>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <%- include("../partials/_footer") %>
-      </div>
-    </footer>
+    <%- include("../partials/_footer") %>
 
     <script src="/js/main.js" defer></script>
   </body>
 </html>
-
