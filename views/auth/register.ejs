@@ -1,18 +1,29 @@
 <!-- views/auth/register.ejs -->
 
-<section class="section">
-  <div class="card" style="max-width: 520px; margin: 0 auto;">
-    <h1>Create your account</h1>
-    <p class="text-muted">
+<section class="section" style="padding-top: 7rem; padding-bottom: 3rem;">
+  <div
+    class="card"
+    style="max-width: 640px; margin: 0 auto; padding: 1.5rem 1.75rem;"
+  >
+    <h1 style="font-size: 1.6rem; line-height: 1.2; margin-bottom: 0.35rem;">
+      Create your account
+    </h1>
+    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0.75rem;">
       Create a secure account to enroll, see events, complete surveys and follow
       your Ella Rises journey.
     </p>
 
-    <form action="/signup" method="POST" class="mt-2">
+    <form
+      action="/signup"
+      method="POST"
+      class="mt-2"
+      style="margin-top: 0.75rem;"
+    >
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
+      <!-- Row 1: First / Last name side by side -->
       <div class="form-grid">
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 0.75rem;">
           <label for="firstName">First name</label>
           <input
             id="firstName"
@@ -22,7 +33,7 @@
             autocomplete="given-name"
           />
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 0.75rem;">
           <label for="lastName">Last name</label>
           <input
             id="lastName"
@@ -34,7 +45,8 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <!-- Row 2: Email (full width) -->
+      <div class="form-group" style="margin-bottom: 0.75rem;">
         <label for="email">Email</label>
         <input
           id="email"
@@ -46,35 +58,37 @@
         />
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autocomplete="new-password"
-        />
+      <!-- Row 3: Password / Confirm password side by side -->
+      <div class="form-grid">
+        <div class="form-group" style="margin-bottom: 0.75rem;">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+        <div class="form-group" style="margin-bottom: 0.75rem;">
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            required
+            autocomplete="new-password"
+          />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm password</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          required
-          autocomplete="new-password"
-        />
-      </div>
-
-      <div class="mt-2">
+      <div class="mt-2" style="margin-top: 0.75rem;">
         <button type="submit" class="btn btn-primary w-full">
           Create account
         </button>
       </div>
 
-      <p class="text-muted mt-2" style="font-size: 0.9rem;">
+      <p class="text-muted mt-2" style="font-size: 0.9rem; margin-top: 0.75rem;">
         Already have an account?
         <a href="/login">Log in</a>
       </p>
