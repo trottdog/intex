@@ -1,0 +1,142 @@
+<!-- views/myJourney/events.ejs -->
+
+<section class="section">
+  <div class="shell">
+    <aside class="sidebar">
+      <%- include("../partials/_sidebarMyJourney") %>
+    </aside>
+
+    <section>
+      <!-- Page header -->
+      <header class="mb-3">
+        <h1 class="mt-0">My Events</h1>
+        <p class="text-muted">
+          View your upcoming Ella Rises events, check details, and look back at what you have already attended.
+        </p>
+      </header>
+
+      <!-- Upcoming events -->
+      <section>
+        <div class="flex-between mb-2" style="gap: 1rem; flex-wrap: wrap;">
+          <div>
+            <h2 class="heading-decorated mt-0">Upcoming events</h2>
+            <p class="text-muted mt-2">
+              These are the events you are currently registered for.
+            </p>
+          </div>
+        </div>
+
+        <% if (!upcomingEvents || upcomingEvents.length === 0) { %>
+          <div class="card">
+            <p class="text-muted mb-0">
+              You do not have any upcoming events on your calendar yet.
+              Visit the public <a href="/events">events page</a> to see what is available.
+            </p>
+          </div>
+        <% } else { %>
+          <div class="card">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% upcomingEvents.forEach(ev => { %>
+                  <tr>
+                    <td>
+                      <strong><%= ev.event_name %></strong><br />
+                      <span class="text-muted" style="font-size: var(--text-xs);">
+                        <%= ev.event_type || 'Event' %>
+                      </span>
+                    </td>
+                    <td><%= ev.event_date_start_formatted %></td>
+                    <td><%= ev.event_location %></td>
+                    <td>
+                      <span class="badge badge--primary">
+                        <%= ev.registration_status || 'Registered' %>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-outline btn-sm">
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+
+      <!-- Past events -->
+      <section id="past" class="mt-4">
+        <div class="flex-between mb-2" style="gap: 1rem; flex-wrap: wrap;">
+          <div>
+            <h2 class="mt-0">Past events</h2>
+            <p class="text-muted mt-2">
+              Events you have already attended, including survey results when available.
+            </p>
+          </div>
+        </div>
+
+        <% if (!pastEvents || pastEvents.length === 0) { %>
+          <div class="card">
+            <p class="text-muted mb-0">
+              Once you have attended events, they will appear here with your survey history.
+            </p>
+          </div>
+        <% } else { %>
+          <div class="card">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Survey</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% pastEvents.forEach(ev => { %>
+                  <tr>
+                    <td>
+                      <strong><%= ev.event_name %></strong><br />
+                      <span class="text-muted" style="font-size: var(--text-xs);">
+                        <%= ev.event_type || 'Event' %>
+                      </span>
+                    </td>
+                    <td><%= ev.event_date_start_formatted %></td>
+                    <td><%= ev.event_location %></td>
+                    <td>
+                      <% if (ev.survey_overall_score) { %>
+                        <span class="badge badge--accent">
+                          Score: <%= ev.survey_overall_score %>
+                        </span>
+                      <% } else { %>
+                        <span class="badge badge--neutral">
+                          Not completed
+                        </span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-outline btn-sm">
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+    </section>
+  </div>
+</section>

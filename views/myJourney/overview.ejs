@@ -7,118 +7,251 @@
     </aside>
 
     <section>
-      <header class="mb-2">
-        <h1>Hi, <%= participant.participant_first_name || 'there' %> 👋</h1>
-        <p class="text-muted">
-          This is your Ella Rises journey. Here you can see your upcoming events,
-          past experiences, milestones and surveys.
-        </p>
+      <!-- Hero / Greeting -->
+      <header class="mb-3">
+        <div class="card card--featured" style="padding: 2rem 2.25rem;">
+          <div class="flex-between" style="gap: 2rem; flex-wrap: wrap;">
+            <div>
+              <p class="badge badge--primary" style="margin-bottom: 0.75rem;">
+                My Journey
+              </p>
+              <h1 class="mt-0" style="font-size: var(--text-3xl);">
+                Hi, <%= participant.participant_first_name || 'there' %> 👋
+              </h1>
+              <p class="text-muted" style="max-width: 520px;">
+                This is your Ella Rises journey space. See your upcoming events,
+                track your milestones, complete surveys, and celebrate how you rise.
+              </p>
+            </div>
+
+            <!-- Quick stat chips -->
+            <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; min-width: 260px;">
+              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
+                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                  Upcoming events
+                </p>
+                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
+                  <%= upcomingEvents.length %>
+                </p>
+              </div>
+              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
+                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                  Milestones achieved
+                </p>
+                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
+                  <%= milestoneSummary.achieved %>
+                </p>
+              </div>
+              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
+                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                  Surveys to complete
+                </p>
+                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
+                  <%= pendingSurveyCount %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
 
-      <!-- Top summary cards -->
-      <div class="grid grid-3 mb-3">
-        <div class="card">
-          <p class="text-muted" style="font-size: 0.8rem;">Upcoming events</p>
-          <h2><%= upcomingEvents.length %></h2>
-          <p class="text-muted" style="font-size: 0.85rem;">
-            Events you are registered for in the coming weeks.
-          </p>
+      <!-- Main content grid: left = events, right = milestones and surveys -->
+      <div class="grid" style="grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr); gap: 2rem;">
+        <!-- Left column: upcoming + recent events -->
+        <div class="stack">
+          <!-- Upcoming events -->
+          <section>
+            <div class="flex-between mb-1" style="gap: 1rem; flex-wrap: wrap;">
+              <div>
+                <h2 class="heading-decorated mt-0">Upcoming events</h2>
+                <p class="text-muted mt-2">
+                  Events you are registered for in the coming weeks.
+                </p>
+              </div>
+              <a href="/my-journey/events" class="btn btn-ghost">
+                View all
+              </a>
+            </div>
+
+            <% if (upcomingEvents.length === 0) { %>
+              <div class="card">
+                <p class="text-muted mb-0">
+                  You do not have any upcoming events yet. Visit the public
+                  <a href="/events">events</a> page to see what is coming.
+                </p>
+              </div>
+            <% } else { %>
+              <div class="grid grid-2 mt-1">
+                <% upcomingEvents.forEach(ev => { %>
+                  <article class="card card--hoverable">
+                    <div class="flex-between" style="gap: 0.75rem; align-items: flex-start;">
+                      <div>
+                        <span class="badge badge--accent mb-1">
+                          <%= ev.event_type || 'Event' %>
+                        </span>
+                        <h3 class="mt-0" style="font-size: var(--text-lg);">
+                          <%= ev.event_name %>
+                        </h3>
+                        <p class="text-muted" style="font-size: var(--text-sm);">
+                          <%= ev.event_date_start_formatted %> ·
+                          <%= ev.event_location %>
+                        </p>
+                      </div>
+                      <div>
+                        <span class="badge badge--primary">
+                          <%= ev.registration_status || 'Registered' %>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="mt-1">
+                      <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-outline btn-sm">
+                        View details
+                      </a>
+                    </div>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+          </section>
+
+          <!-- Recent events -->
+          <section class="mt-3">
+            <div class="flex-between mb-1" style="gap: 1rem; flex-wrap: wrap;">
+              <div>
+                <h2 class="mt-0">Recent events</h2>
+                <p class="text-muted mt-2">
+                  Once you attend events, you will see them here along with your
+                  survey responses.
+                </p>
+              </div>
+              <a href="/my-journey/events#past" class="btn btn-ghost">
+                View event history
+              </a>
+            </div>
+
+            <% if (pastEvents.length === 0) { %>
+              <div class="card">
+                <p class="text-muted mb-0">
+                  No events in your history yet. After you attend an event, it will
+                  appear here.
+                </p>
+              </div>
+            <% } else { %>
+              <div class="grid grid-2 mt-1">
+                <% pastEvents.slice(0, 4).forEach(ev => { %>
+                  <article class="card card--hoverable">
+                    <h3 class="mt-0" style="font-size: var(--text-md);">
+                      <%= ev.event_name %>
+                    </h3>
+                    <p class="text-muted" style="font-size: var(--text-sm);">
+                      <%= ev.event_date_start_formatted %> ·
+                      <%= ev.event_location %>
+                    </p>
+                    <p class="text-muted" style="font-size: 0.85rem;">
+                      Status:
+                      <strong><%= ev.registration_status || 'Completed' %></strong>
+                      <% if (ev.survey_overall_score) { %>
+                        · Survey score:
+                        <strong><%= ev.survey_overall_score %></strong>
+                      <% } %>
+                    </p>
+                    <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-ghost btn-sm" style="margin-left: -0.5rem; margin-top: 0.5rem;">
+                      View event →
+                    </a>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+          </section>
         </div>
 
-        <div class="card">
-          <p class="text-muted" style="font-size: 0.8rem;">Milestones achieved</p>
-          <h2><%= milestoneSummary.achieved %></h2>
-          <p class="text-muted" style="font-size: 0.85rem;">
-            Milestones you’ve already marked as achieved.
-          </p>
-        </div>
+        <!-- Right column: milestones + surveys -->
+        <div class="stack">
+          <!-- Milestones summary -->
+          <section>
+            <div class="card">
+              <div class="flex-between" style="gap: 1rem; align-items: flex-start;">
+                <div>
+                  <h2 class="mt-0">Milestones</h2>
+                  <p class="text-muted">
+                    Track your progress toward education and career goals.
+                  </p>
+                </div>
+                <a href="/my-journey/milestones" class="btn btn-outline btn-sm">
+                  Open milestones
+                </a>
+              </div>
 
-        <div class="card">
-          <p class="text-muted" style="font-size: 0.8rem;">Surveys to complete</p>
-          <h2><%= pendingSurveyCount %></h2>
-          <p class="text-muted" style="font-size: 0.85rem;">
-            Help Ella Rises improve by sharing how events went.
-          </p>
+              <div class="grid mt-2" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;">
+                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
+                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                    Planned
+                  </p>
+                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
+                    <%= milestoneSummary.planned %>
+                  </p>
+                </div>
+                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
+                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                    In progress
+                  </p>
+                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
+                    <%= milestoneSummary.inProgress %>
+                  </p>
+                </div>
+                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
+                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+                    Achieved
+                  </p>
+                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
+                    <%= milestoneSummary.achieved %>
+                  </p>
+                </div>
+              </div>
+
+              <p class="text-muted mt-2" style="font-size: 0.9rem;">
+                You can view and update your milestones in more detail on the
+                Milestones page.
+              </p>
+            </div>
+          </section>
+
+          <!-- Surveys summary -->
+          <section>
+            <div class="card">
+              <div class="flex-between" style="gap: 1rem; align-items: center;">
+                <div>
+                  <h2 class="mt-0">Surveys</h2>
+                  <p class="text-muted">
+                    Share how events went so we can improve and celebrate what is working.
+                  </p>
+                </div>
+                <a href="/my-journey/surveys" class="btn btn-primary btn-sm">
+                  Go to surveys
+                </a>
+              </div>
+
+              <div class="mt-2">
+                <% if (pendingSurveyCount === 0) { %>
+                  <div class="alert alert-success">
+                    <span>✨ You are all caught up. Thank you for your feedback!</span>
+                  </div>
+                <% } else { %>
+                  <div class="alert alert-info">
+                    <span>
+                      You have <strong><%= pendingSurveyCount %></strong> survey<%= pendingSurveyCount === 1 ? '' : 's' %> waiting.
+                    </span>
+                  </div>
+                <% } %>
+                <p class="text-muted" style="font-size: 0.9rem;">
+                  Surveys usually take only a few minutes and help shape future
+                  Ella Rises experiences.
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-
-      <!-- Upcoming events -->
-      <section class="mb-3">
-        <div class="stack">
-          <h2>Upcoming events</h2>
-          <% if (upcomingEvents.length === 0) { %>
-            <p class="text-muted">
-              You don't have any upcoming events yet. Visit the events page to see
-              what’s coming soon.
-            </p>
-          <% } else { %>
-            <div class="grid grid-2 mt-1">
-              <% upcomingEvents.forEach(ev => { %>
-                <article class="card card-event card--hoverable">
-                  <div>
-                    <h3 class="mt-0"><%= ev.event_name %></h3>
-                    <p class="text-muted">
-                      <%= ev.event_date_start_formatted %> · <%= ev.event_location %>
-                    </p>
-                  </div>
-                  <p class="mt-1 text-muted">
-                    Status: <%= ev.registration_status || 'Registered' %>
-                  </p>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
-      </section>
-
-      <!-- Recent events -->
-      <section class="mb-3">
-        <div class="stack">
-          <h2>Recent events</h2>
-          <% if (pastEvents.length === 0) { %>
-            <p class="text-muted">
-              Once you’ve attended events, you’ll see them here along with your
-              survey responses.
-            </p>
-          <% } else { %>
-            <div class="grid grid-2 mt-1">
-              <% pastEvents.forEach(ev => { %>
-                <article class="card card--hoverable">
-                  <h3 class="mt-0"><%= ev.event_name %></h3>
-                  <p class="text-muted">
-                    <%= ev.event_date_start_formatted %> · <%= ev.event_location %>
-                  </p>
-                  <p class="text-muted" style="font-size: 0.9rem;">
-                    Status: <%= ev.registration_status || 'Completed' %>
-                    <% if (ev.survey_overall_score) { %>
-                      · Survey score: <%= ev.survey_overall_score %>
-                    <% } %>
-                  </p>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
-      </section>
-
-      <!-- Milestone summary -->
-      <section class="mb-3">
-        <div class="card">
-          <h2>Milestones</h2>
-          <p class="text-muted">
-            Planned: <strong><%= milestoneSummary.planned %></strong> ·
-            In progress: <strong><%= milestoneSummary.inProgress %></strong> ·
-            Achieved: <strong><%= milestoneSummary.achieved %></strong>
-          </p>
-          <p class="text-muted" style="font-size: 0.9rem;">
-            You’ll be able to view and update your milestones in more detail on
-            the Milestones page.
-          </p>
-          <a href="/my-journey/milestones" class="btn btn-outline mt-1">
-            View milestones
-          </a>
-        </div>
-      </section>
     </section>
   </div>
 </section>

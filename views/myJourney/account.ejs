@@ -1,0 +1,134 @@
+<!-- views/myJourney/account.ejs -->
+
+<section class="section">
+  <div class="shell">
+    <aside class="sidebar">
+      <%- include("../partials/_sidebarMyJourney") %>
+    </aside>
+
+    <section>
+      <header class="mb-3">
+        <h1 class="mt-0">My Account</h1>
+        <p class="text-muted">
+          Review and update your contact information so Ella Rises can stay in touch
+          about events, reminders, and opportunities.
+        </p>
+      </header>
+
+      <div class="grid" style="grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 2rem; align-items: flex-start;">
+        <!-- Profile summary -->
+        <section>
+          <div class="card">
+            <h2 class="mt-0">Profile</h2>
+            <p style="font-size: var(--text-lg); margin-bottom: 0.25rem;">
+              <strong>
+                <%= participant.participant_first_name || '' %>
+                <%= participant.participant_last_name || '' %>
+              </strong>
+            </p>
+            <p class="text-muted" style="margin-bottom: 0.5rem;">
+              <%= participant.participant_role || 'Participant' %>
+            </p>
+
+            <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: 0.25rem;">
+              Email: <%= user.email %>
+            </p>
+            <% if (participant.participant_phone) { %>
+              <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: 0.25rem;">
+                Phone: <%= participant.participant_phone %>
+              </p>
+            <% } %>
+            <% if (participant.participant_city || participant.participant_state) { %>
+              <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: 0.25rem;">
+                Location:
+                <%= participant.participant_city || '' %>
+                <%= participant.participant_state ? (participant.participant_city ? ', ' : '') + participant.participant_state : '' %>
+              </p>
+            <% } %>
+
+            <% if (participant.participant_school_or_employer) { %>
+              <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: 0.25rem;">
+                School / employer: <%= participant.participant_school_or_employer %>
+              </p>
+            <% } %>
+
+            <% if (participant.participant_field_of_interest) { %>
+              <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: 0;">
+                Field of interest: <%= participant.participant_field_of_interest %>
+              </p>
+            <% } %>
+          </div>
+        </section>
+
+        <!-- Editable form -->
+        <section>
+          <div class="card">
+            <h2 class="mt-0">Update contact details</h2>
+            <p class="text-muted">
+              Changes here will help us send accurate reminders and opportunities.
+            </p>
+
+            <form method="POST" action="/my-journey/account" class="mt-2">
+              <div class="form-group">
+                <label for="participant_phone">Phone</label>
+                <input
+                  type="tel"
+                  id="participant_phone"
+                  name="participant_phone"
+                  value="<%= participant.participant_phone || '' %>"
+                />
+              </div>
+
+              <div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;">
+                <div class="form-group">
+                  <label for="participant_city">City</label>
+                  <input
+                    type="text"
+                    id="participant_city"
+                    name="participant_city"
+                    value="<%= participant.participant_city || '' %>"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="participant_state">State</label>
+                  <input
+                    type="text"
+                    id="participant_state"
+                    name="participant_state"
+                    value="<%= participant.participant_state || '' %>"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="participant_school_or_employer">School or employer</label>
+                <input
+                  type="text"
+                  id="participant_school_or_employer"
+                  name="participant_school_or_employer"
+                  value="<%= participant.participant_school_or_employer || '' %>"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="participant_field_of_interest">Field of interest</label>
+                <input
+                  type="text"
+                  id="participant_field_of_interest"
+                  name="participant_field_of_interest"
+                  value="<%= participant.participant_field_of_interest || '' %>"
+                />
+              </div>
+
+              <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+</section>

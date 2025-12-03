@@ -8,10 +8,10 @@ const flash = require("connect-flash");
 const helmet = require("helmet");
 const csrf = require("csurf");
 const expressLayouts = require("express-ejs-layouts");
-const myJourneyRoutes = require("./routes/myJourneyRoutes");
 
 const publicRoutes = require("./routes/publicRoutes");
 const authRoutes = require("./routes/authRoutes");
+const myJourneyRoutes = require("./routes/myJourneyRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;

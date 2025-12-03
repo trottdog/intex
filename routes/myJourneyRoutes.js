@@ -1,165 +1,307 @@
 // routes/myJourneyRoutes.js
-const express = require("express");
-const db = require("../config/db");
+//
+// My Journey routes for participant-facing dashboard.
+//
 
+const express = require("express");
 const router = express.Router();
 
+/**
+ * Very simple auth guard.
+ * If you already have your own requireAuth middleware,
+ * you can delete this function and instead:
+ *
+ *   const { requireAuth } = require("../middleware/auth");
+ *   router.use(requireAuth);
+ */
 function requireAuth(req, res, next) {
   if (!req.session || !req.session.user) {
-    req.flash("error", "Please log in to view your journey.");
+    // Adjust this redirect if your login route is different
     return res.redirect("/login");
   }
-  return next();
+  next();
 }
 
-function isUpcoming(dateStr) {
-  if (!dateStr) return false;
-  const today = new Date();
-  const d = new Date(dateStr);
-  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const eventMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  return eventMidnight >= todayMidnight;
+// Apply auth to all My Journey routes
+router.use(requireAuth);
+
+/**
+ * Helper to make sure views always get safe defaults
+ * so EJS does not blow up on undefined.
+ */
+function ensureArray(value) {
+  return Array.isArray(value) ? value : [];
 }
 
-function formatDate(dateStr) {
-  if (!dateStr) return "";
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-// GET /my-journey – overview for participant
-router.get("/my-journey", requireAuth, async (req, res) => {
-  req.activeNav = "my-journey";
-  res.locals.activeNav = "my-journey";
-
-  const { participantId, email } = req.session.user;
-
+/**
+ * GET /my-journey
+ * GET /my-journey/overview
+ *
+ * Overview dashboard for the participant.
+ */
+async function renderOverview(req, res) {
   try {
-    // 1) Get participant profile
-    let participant = null;
-
-    if (participantId) {
-      participant = await db("participant_info")
-        .where({ participant_id: participantId })
-        .first();
-    }
-
-    if (!participant) {
-      participant = await db("participant_info")
-        .where({ participant_email: email })
-        .first();
-    }
-
-    if (!participant) {
-      req.flash("error", "We could not find your participant profile.");
-      return res.redirect("/login");
-    }
-
-    const participantEmail = participant.participant_email;
-
-    // 2) Registrations for this participant
-    const registrations = await db("registration_info as r")
-      .leftJoin("attendance_report as a", "r.registration_status_id", "a.registration_status_id")
-      .select(
-        "r.registration_id",
-        "r.event_name",
-        "r.event_date_start",
-        "r.event_location",
-        "r.registration_status_id",
-        "a.registration_status",
-        "a.registration_attended_flag",
-        "r.survey_submission_date",
-        "r.survey_overall_score"
-      )
-      .where("r.participant_email", participantEmail)
-      .orderBy("r.event_date_start", "desc");
-
-    const upcomingEvents = [];
-    const pastEvents = [];
-    let pendingSurveyCount = 0;
-
-    registrations.forEach((r) => {
-      const event = {
-        registration_id: r.registration_id,
-        event_name: r.event_name,
-        event_date_start: r.event_date_start,
-        event_date_start_formatted: formatDate(r.event_date_start),
-        event_location: r.event_location,
-        registration_status: r.registration_status,
-        attended_flag: r.registration_attended_flag,
-        survey_submission_date: r.survey_submission_date,
-        survey_overall_score: r.survey_overall_score,
-      };
-
-      if (isUpcoming(r.event_date_start)) {
-        upcomingEvents.push(event);
-      } else {
-        pastEvents.push(event);
-      }
-
-      if (r.registration_attended_flag && !r.survey_submission_date) {
-        pendingSurveyCount += 1;
-      }
-    });
-
-    const upcomingEventsPreview = upcomingEvents
-      .sort((a, b) => new Date(a.event_date_start) - new Date(b.event_date_start))
-      .slice(0, 4);
-
-    const pastEventsPreview = pastEvents.slice(0, 5);
-
-    // 3) Milestones summary
-    const milestones = await db("participant_milestone as pm")
-      .leftJoin(
-        "milestone_template as mt",
-        "pm.milestone_template_id",
-        "mt.milestone_template_id"
-      )
-      .select(
-        "pm.participant_milestone_id",
-        "pm.status",
-        "pm.planned_date",
-        "pm.achieved_date",
-        "mt.title",
-        "mt.category",
-        "mt.icon_name"
-      )
-      .where("pm.participant_id", participant.participant_id)
-      .orderBy("pm.created_at", "desc");
-
-    let milestonesPlanned = 0;
-    let milestonesInProgress = 0;
-    let milestonesAchieved = 0;
-
-    milestones.forEach((m) => {
-      if (m.status === "planned") milestonesPlanned += 1;
-      if (m.status === "in_progress") milestonesInProgress += 1;
-      if (m.status === "achieved") milestonesAchieved += 1;
-    });
-
-    const milestoneSummary = {
-      total: milestones.length,
-      planned: milestonesPlanned,
-      inProgress: milestonesInProgress,
-      achieved: milestonesAchieved,
+    // TODO: Replace stubs with your real DB calls.
+    const participant = {
+      participant_first_name: req.session.user.first_name || "Friend",
+      participant_last_name: req.session.user.last_name || "",
     };
 
-    return res.render("myJourney/overview", {
+    const upcomingEvents = []; // fill from registrations table
+    const pastEvents = []; // fill from registrations table
+
+    const milestoneSummary = {
+      planned: 0,
+      inProgress: 0,
+      achieved: 0,
+    };
+
+    const pendingSurveyCount = 0;
+
+    res.render("myJourney/overview", {
       pageTitle: "My Journey | Ella Rises",
       participant,
-      upcomingEvents: upcomingEventsPreview,
-      pastEvents: pastEventsPreview,
+      upcomingEvents: ensureArray(upcomingEvents),
+      pastEvents: ensureArray(pastEvents),
       pendingSurveyCount,
       milestoneSummary,
       sidebarActive: "overview",
     });
   } catch (err) {
-    console.error("Error loading My Journey:", err);
-    req.flash("error", "We had trouble loading your journey. Please try again.");
+    console.error("Error loading My Journey overview:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your journey overview. Please try again."
+    );
     return res.redirect("/");
+  }
+}
+
+router.get("/my-journey", renderOverview);
+router.get("/my-journey/overview", renderOverview);
+
+/**
+ * GET /my-journey/events
+ *
+ * List of upcoming and past events for this participant.
+ */
+router.get("/my-journey/events", async (req, res) => {
+  try {
+    // TODO: Replace with real DB queries filtered by participant / user id.
+    const participant = {
+      participant_first_name: req.session.user.first_name || "Friend",
+    };
+
+    const upcomingEvents = []; // registrations in future
+    const pastEvents = []; // registrations in past
+
+    res.render("myJourney/events", {
+      pageTitle: "My Events | Ella Rises",
+      participant,
+      upcomingEvents: ensureArray(upcomingEvents),
+      pastEvents: ensureArray(pastEvents),
+      sidebarActive: "events",
+    });
+  } catch (err) {
+    console.error("Error loading My Journey events:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your events. Please try again."
+    );
+    return res.redirect("/my-journey");
+  }
+});
+
+/**
+ * GET /my-journey/events/:registrationId
+ *
+ * Detail view for a single registration / event for this participant.
+ */
+router.get("/my-journey/events/:registrationId", async (req, res) => {
+  const { registrationId } = req.params;
+
+  try {
+    // TODO: Replace with real DB query joining registration + event + survey + carpool
+    const registration = {
+      registration_id: registrationId,
+      event_name: "Ella Rises Sample Event",
+      event_type: "Workshop",
+      event_date_start_formatted: "Jan 1, 2025",
+      event_time_start_formatted: "",
+      event_location: "Provo, UT",
+      registration_status: "Registered",
+      registration_check_in_date_formatted: "",
+      registration_check_in_time_formatted: "",
+      survey_status: "pending", // or "completed"
+      can_complete_survey: false,
+      survey_overall_score: null,
+    };
+
+    const carpoolAssignments = []; // [{...}] from carpool tables if you have them
+
+    res.render("myJourney/event-detail-user", {
+      pageTitle: "Event Details | Ella Rises",
+      registration,
+      carpoolAssignments: ensureArray(carpoolAssignments),
+      sidebarActive: "events",
+    });
+  } catch (err) {
+    console.error("Error loading event detail for My Journey:", err);
+    req.flash(
+      "error",
+      "We had trouble loading that event. Please try again."
+    );
+    return res.redirect("/my-journey/events");
+  }
+});
+
+/**
+ * GET /my-journey/milestones
+ *
+ * Participant milestone board.
+ */
+router.get("/my-journey/milestones", async (req, res) => {
+  try {
+    // TODO: Replace with real DB query from participant_milestone / milestone_template
+    const participant = {
+      participant_first_name: req.session.user.first_name || "Friend",
+    };
+
+    const milestonesPlanned = [];
+    const milestonesInProgress = [];
+    const milestonesAchieved = [];
+
+    res.render("myJourney/milestones", {
+      pageTitle: "My Milestones | Ella Rises",
+      participant,
+      milestonesPlanned: ensureArray(milestonesPlanned),
+      milestonesInProgress: ensureArray(milestonesInProgress),
+      milestonesAchieved: ensureArray(milestonesAchieved),
+      sidebarActive: "milestones",
+    });
+  } catch (err) {
+    console.error("Error loading My Journey milestones:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your milestones. Please try again."
+    );
+    return res.redirect("/my-journey");
+  }
+});
+
+/**
+ * GET /my-journey/surveys
+ *
+ * List of pending and completed surveys.
+ */
+router.get("/my-journey/surveys", async (req, res) => {
+  try {
+    // TODO: Replace with real DB query linking registrations + post_event_survey
+    const pendingSurveys = [];
+    const completedSurveys = [];
+
+    res.render("myJourney/surveys", {
+      pageTitle: "My Surveys | Ella Rises",
+      pendingSurveys: ensureArray(pendingSurveys),
+      completedSurveys: ensureArray(completedSurveys),
+      sidebarActive: "surveys",
+    });
+  } catch (err) {
+    console.error("Error loading My Journey surveys:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your surveys. Please try again."
+    );
+    return res.redirect("/my-journey");
+  }
+});
+
+/**
+ * GET /my-journey/surveys/:registrationId
+ *
+ * Survey form for a single event (you can swap the view name with your actual form view).
+ */
+router.get("/my-journey/surveys/:registrationId", async (req, res) => {
+  const { registrationId } = req.params;
+
+  try {
+    // TODO: Load registration + event info to show context for the survey
+    res.render("myJourney/survey-form", {
+      pageTitle: "Event Survey | Ella Rises",
+      registrationId,
+      sidebarActive: "surveys",
+    });
+  } catch (err) {
+    console.error("Error loading survey form:", err);
+    req.flash(
+      "error",
+      "We had trouble loading that survey. Please try again."
+    );
+    return res.redirect("/my-journey/surveys");
+  }
+});
+
+/**
+ * GET /my-journey/photos
+ *
+ * Photo gallery for this participant.
+ */
+router.get("/my-journey/photos", async (req, res) => {
+  try {
+    // TODO: Replace with real DB query from photo + photo_tag tables
+    const taggedPhotos = [];
+
+    res.render("myJourney/my-photos", {
+      pageTitle: "My Photos | Ella Rises",
+      taggedPhotos: ensureArray(taggedPhotos),
+      sidebarActive: "photos",
+    });
+  } catch (err) {
+    console.error("Error loading My Journey photos:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your photos. Please try again."
+    );
+    return res.redirect("/my-journey");
+  }
+});
+
+/**
+ * GET /my-journey/account
+ *
+ * Account / profile info for participant.
+ */
+router.get("/my-journey/account", async (req, res) => {
+  try {
+    // TODO: Replace with real DB query from participant_info + user table
+    const participant = {
+      participant_first_name: req.session.user.first_name || "Friend",
+      participant_last_name: req.session.user.last_name || "",
+      participant_city: "",
+      participant_state: "",
+      participant_phone: "",
+      participant_school_or_employer: "",
+      participant_field_of_interest: "",
+      participant_role: "Participant",
+    };
+
+    const user = {
+      email: req.session.user.email,
+    };
+
+    res.render("myJourney/account", {
+      pageTitle: "My Account | Ella Rises",
+      participant,
+      user,
+      sidebarActive: "account",
+    });
+  } catch (err) {
+    console.error("Error loading My Journey account:", err);
+    req.flash(
+      "error",
+      "We had trouble loading your account. Please try again."
+    );
+    return res.redirect("/my-journey");
   }
 });
 
