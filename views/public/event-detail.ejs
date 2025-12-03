@@ -1,0 +1,702 @@
+<!-- views/public/event-detail.ejs -->
+<%
+  const isLoggedIn = typeof user !== 'undefined' && user;
+%>
+
+<!-- Back Link -->
+<section style="padding-top: 6rem;">
+  <div class="container">
+    <a href="/events" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back to Events
+    </a>
+  </div>
+</section>
+
+<!-- Event Detail -->
+<section class="section--tight">
+  <div class="container">
+    <div class="event-detail-layout">
+      <!-- Main Content -->
+      <div class="event-detail-main">
+        <article class="event-detail-card">
+          <!-- Hero Image -->
+          <div class="event-hero">
+            <% if (event.event_cover_photo) { %>
+              <img src="<%= event.event_cover_photo %>" alt="<%= event.event_name %>" />
+            <% } else { %>
+              <div class="event-hero-placeholder"></div>
+            <% } %>
+            <span class="event-type-badge"><%= event.event_type || 'Event' %></span>
+          </div>
+          
+          <!-- Event Content -->
+          <div class="event-content">
+            <h1><%= event.event_name %></h1>
+            
+            <!-- Quick Info -->
+            <div class="event-quick-info">
+              <div class="quick-info-item">
+                <div class="quick-info-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div>
+                  <span class="quick-info-label">Date</span>
+                  <span class="quick-info-value"><%= event.event_date_start_formatted || 'TBD' %></span>
+                </div>
+              </div>
+              
+              <div class="quick-info-item">
+                <div class="quick-info-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <span class="quick-info-label">Time</span>
+                  <span class="quick-info-value">
+                    <%= event.event_time_start_formatted || 'TBD' %>
+                    <% if (event.event_time_end_formatted) { %>
+                      - <%= event.event_time_end_formatted %>
+                    <% } %>
+                  </span>
+                </div>
+              </div>
+              
+              <div class="quick-info-item">
+                <div class="quick-info-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <span class="quick-info-label">Location</span>
+                  <span class="quick-info-value"><%= event.event_location || 'TBD' %></span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Description -->
+            <% if (event.event_description) { %>
+              <div class="event-description">
+                <h2>About This Event</h2>
+                <div class="description-text">
+                  <%= event.event_description %>
+                </div>
+              </div>
+            <% } %>
+            
+            <!-- Map -->
+            <% if (event.event_location_lat && event.event_location_lng) { %>
+              <div class="event-map">
+                <h2>Location</h2>
+                <div class="map-container" id="eventMap"></div>
+                <p class="map-address">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <%= event.event_location %>
+                </p>
+              </div>
+            <% } %>
+            
+            <!-- Additional Details -->
+            <% if (event.event_age_range || event.event_prerequisites) { %>
+              <div class="event-additional">
+                <h2>Additional Information</h2>
+                <div class="additional-grid">
+                  <% if (event.event_age_range) { %>
+                    <div class="additional-item">
+                      <strong>Age Range:</strong> <%= event.event_age_range %>
+                    </div>
+                  <% } %>
+                  <% if (event.event_prerequisites) { %>
+                    <div class="additional-item">
+                      <strong>Prerequisites:</strong> <%= event.event_prerequisites %>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </article>
+      </div>
+      
+      <!-- Sidebar -->
+      <aside class="event-detail-sidebar">
+        <!-- Registration Card -->
+        <div class="registration-card">
+          <div class="registration-header">
+            <% if (event.is_past) { %>
+              <span class="event-status event-status--past">Past Event</span>
+            <% } else if (event.spots_remaining === 0) { %>
+              <span class="event-status event-status--full">Full</span>
+            <% } else { %>
+              <span class="event-status event-status--open">Open</span>
+            <% } %>
+          </div>
+          
+          <% if (!event.is_past) { %>
+            <div class="registration-capacity">
+              <% if (event.event_capacity) { %>
+                <div class="capacity-bar">
+                  <div class="capacity-fill" style="width: <%= Math.min(100, ((event.event_capacity - (event.spots_remaining || 0)) / event.event_capacity) * 100) %>%"></div>
+                </div>
+                <p class="capacity-text">
+                  <% if (event.spots_remaining === 0) { %>
+                    Event is full
+                  <% } else if (event.spots_remaining !== null) { %>
+                    <%= event.spots_remaining %> of <%= event.event_capacity %> spots remaining
+                  <% } else { %>
+                    <%= event.event_capacity %> spots available
+                  <% } %>
+                </p>
+              <% } %>
+            </div>
+            
+            <% if (isLoggedIn) { %>
+              <% if (event.spots_remaining !== 0) { %>
+                <form action="/events/<%= event.event_details_id %>/register" method="POST">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <button type="submit" class="btn btn-primary btn-lg w-full">
+                    Register for Event
+                  </button>
+                </form>
+              <% } else { %>
+                <button class="btn btn-outline btn-lg w-full" disabled>
+                  Event Full - Join Waitlist
+                </button>
+              <% } %>
+            <% } else { %>
+              <a href="/login?redirect=/events/<%= event.event_details_id %>" class="btn btn-primary btn-lg w-full">
+                Log In to Register
+              </a>
+              <p class="registration-note">
+                Don't have an account? <a href="/signup">Sign up</a> to join Ella Rises!
+              </p>
+            <% } %>
+          <% } else { %>
+            <p class="past-event-note">This event has already occurred.</p>
+          <% } %>
+        </div>
+        
+        <!-- Share Card -->
+        <div class="share-card">
+          <h3>Share This Event</h3>
+          <div class="share-buttons">
+            <button class="share-btn" onclick="shareToFacebook()" title="Share on Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </button>
+            <button class="share-btn" onclick="shareToTwitter()" title="Share on Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+              </svg>
+            </button>
+            <button class="share-btn" onclick="copyEventLink()" title="Copy Link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Contact Card -->
+        <div class="contact-card">
+          <h3>Questions?</h3>
+          <p>Reach out to us for more information about this event.</p>
+          <a href="mailto:nadia@ellarises.org" class="btn btn-outline w-full">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            Contact Us
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- Related Events -->
+<% if (relatedEvents.length > 0) { %>
+  <section class="section">
+    <div class="container">
+      <h2 class="mb-4">More Events You Might Like</h2>
+      <div class="related-events-grid">
+        <% relatedEvents.forEach(related => { %>
+          <a href="/events/<%= related.event_details_id %>" class="related-event-card">
+            <div class="related-event-date">
+              <span class="related-month"><%= related.event_month || 'TBD' %></span>
+              <span class="related-day"><%= related.event_day || '--' %></span>
+            </div>
+            <div class="related-event-content">
+              <h4><%= related.event_name %></h4>
+              <p><%= related.event_type || 'Event' %></p>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+<style>
+  /* Back Link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+  
+  .back-link:hover {
+    color: var(--color-primary-dark);
+  }
+  
+  /* Layout */
+  .event-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  /* Main Card */
+  .event-detail-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .event-hero {
+    position: relative;
+    height: 350px;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-dusty-blue) 100%);
+  }
+  
+  .event-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .event-hero-placeholder {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .event-type-badge {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    padding: 0.4rem 1rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .event-content {
+    padding: 2rem;
+  }
+  
+  .event-content h1 {
+    font-size: var(--text-3xl);
+    margin: 0 0 1.5rem;
+    line-height: 1.2;
+  }
+  
+  /* Quick Info */
+  .event-quick-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+  }
+  
+  .quick-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .quick-info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary-soft);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-dark);
+    flex-shrink: 0;
+  }
+  
+  .quick-info-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .quick-info-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .quick-info-value {
+    display: block;
+    font-weight: 500;
+  }
+  
+  /* Description */
+  .event-description {
+    margin-bottom: 2rem;
+  }
+  
+  .event-description h2 {
+    font-size: var(--text-lg);
+    margin: 0 0 1rem;
+  }
+  
+  .description-text {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+  
+  /* Map */
+  .event-map {
+    margin-bottom: 2rem;
+  }
+  
+  .event-map h2 {
+    font-size: var(--text-lg);
+    margin: 0 0 1rem;
+  }
+  
+  .map-container {
+    height: 250px;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+  }
+  
+  .map-address {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  /* Additional Info */
+  .event-additional h2 {
+    font-size: var(--text-lg);
+    margin: 0 0 1rem;
+  }
+  
+  .additional-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+  
+  .additional-item {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  .additional-item strong {
+    color: var(--color-text);
+  }
+  
+  /* Sidebar */
+  .event-detail-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 1rem);
+  }
+  
+  /* Registration Card */
+  .registration-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .registration-header {
+    margin-bottom: 1rem;
+  }
+  
+  .event-status {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .event-status--open {
+    background: var(--color-success-soft);
+    color: var(--color-accent-dark);
+  }
+  
+  .event-status--full {
+    background: rgba(244, 176, 146, 0.2);
+    color: #c97a4a;
+  }
+  
+  .event-status--past {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+  }
+  
+  .registration-capacity {
+    margin-bottom: 1.5rem;
+  }
+  
+  .capacity-bar {
+    height: 6px;
+    background: var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  
+  .capacity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-pill);
+    transition: width 0.5s ease-out;
+  }
+  
+  .capacity-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  .registration-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: 1rem 0 0;
+  }
+  
+  .registration-note a {
+    color: var(--color-primary-dark);
+    font-weight: 500;
+  }
+  
+  .past-event-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: 0;
+  }
+  
+  /* Share Card */
+  .share-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .share-card h3 {
+    font-size: var(--text-md);
+    margin: 0 0 1rem;
+  }
+  
+  .share-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .share-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+  }
+  
+  .share-btn:hover {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+  }
+  
+  .share-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Contact Card */
+  .contact-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .contact-card h3 {
+    font-size: var(--text-md);
+    margin: 0 0 0.5rem;
+  }
+  
+  .contact-card p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+  
+  /* Related Events */
+  .related-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .related-event-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast);
+  }
+  
+  .related-event-card:hover {
+    border-color: var(--color-primary-soft);
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .related-event-date {
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  
+  .related-month {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+  }
+  
+  .related-day {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    line-height: 1;
+  }
+  
+  .related-event-content {
+    flex: 1;
+  }
+  
+  .related-event-content h4 {
+    font-size: var(--text-md);
+    margin: 0 0 0.25rem;
+  }
+  
+  .related-event-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  .related-event-card svg {
+    color: var(--color-text-light);
+    flex-shrink: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .event-detail-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .event-detail-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    
+    .registration-card,
+    .share-card,
+    .contact-card {
+      margin-bottom: 0;
+    }
+    
+    .event-hero {
+      height: 250px;
+    }
+  }
+</style>
+
+<script>
+  // Share functions
+  function shareToFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+  }
+  
+  function shareToTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('<%= event.event_name %> - Join us at this Ella Rises event!');
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+  }
+  
+  function copyEventLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link copied to clipboard!');
+    });
+  }
+</script>

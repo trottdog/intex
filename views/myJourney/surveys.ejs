@@ -1,0 +1,375 @@
+<!-- views/myJourney/surveys.ejs -->
+
+<div class="page-header">
+  <h1>My Surveys</h1>
+  <p class="page-header-subtitle">Help us improve by sharing your experience after events</p>
+</div>
+
+<!-- Pending Surveys Section -->
+<section class="surveys-section">
+  <div class="section-header">
+    <h2>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+      </svg>
+      Surveys to Complete
+    </h2>
+    <% if (pendingSurveys.length > 0) { %>
+      <span class="badge badge--primary"><%= pendingSurveys.length %> pending</span>
+    <% } %>
+  </div>
+  
+  <% if (pendingSurveys.length > 0) { %>
+    <div class="surveys-grid">
+      <% pendingSurveys.forEach(survey => { %>
+        <article class="survey-card survey-card--pending">
+          <div class="survey-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div class="survey-card-content">
+            <h3><%= survey.event_name %></h3>
+            <p class="survey-card-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <%= survey.event_date_formatted || 'Recently attended' %>
+            </p>
+            <p class="survey-card-desc">
+              Share your feedback about this <%= survey.event_type || 'event' %> to help us improve future programs.
+            </p>
+          </div>
+          <a href="/my-journey/surveys/<%= survey.registration_id %>" class="btn btn-primary">
+            Take Survey
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </article>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="success-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <h3>You're all caught up!</h3>
+      <p>No pending surveys at this time. We'll notify you when a new survey becomes available after an event.</p>
+    </div>
+  <% } %>
+</section>
+
+<!-- Completed Surveys Section -->
+<section class="surveys-section mt-4">
+  <div class="section-header">
+    <h2>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      Completed Surveys
+    </h2>
+    <span class="section-count"><%= completedSurveys.length %> completed</span>
+  </div>
+  
+  <% if (completedSurveys.length > 0) { %>
+    <div class="completed-surveys-list">
+      <% completedSurveys.forEach(survey => { %>
+        <article class="completed-survey-row">
+          <div class="completed-survey-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="completed-survey-content">
+            <h4><%= survey.event_name %></h4>
+            <p class="text-muted">
+              <%= survey.event_type || 'Event' %> · <%= survey.event_date_formatted %>
+            </p>
+          </div>
+          <div class="completed-survey-meta">
+            <span class="completed-date">
+              Completed <%= survey.survey_completed_date_formatted || 'recently' %>
+            </span>
+            <% if (survey.overall_score) { %>
+              <div class="survey-score">
+                <span class="score-value"><%= survey.overall_score %></span>
+                <span class="score-label">/ 10</span>
+              </div>
+            <% } %>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty-state-inline">
+      <p>No completed surveys yet. Once you complete a survey, it will appear here.</p>
+    </div>
+  <% } %>
+</section>
+
+<style>
+  /* Surveys Section */
+  .surveys-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-lg);
+    margin: 0;
+    flex: 1;
+  }
+  
+  .section-header h2 svg {
+    color: var(--color-text-muted);
+  }
+  
+  .section-count {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  /* Surveys Grid */
+  .surveys-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+  
+  .survey-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+  }
+  
+  .survey-card--pending {
+    border-left: 4px solid var(--color-primary-dark);
+    background: linear-gradient(135deg, rgba(249, 175, 177, 0.05) 0%, var(--color-bg) 100%);
+  }
+  
+  .survey-card:hover {
+    border-color: var(--color-primary-soft);
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .survey-card-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary-soft);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: var(--color-primary-dark);
+  }
+  
+  .survey-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .survey-card-content {
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+  
+  .survey-card-content h3 {
+    font-size: var(--text-lg);
+    margin: 0 0 0.5rem;
+  }
+  
+  .survey-card-date {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+  
+  .survey-card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .survey-card .btn {
+    align-self: flex-start;
+  }
+  
+  /* Success State */
+  .success-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--color-success-soft);
+    border-radius: var(--radius-md);
+  }
+  
+  .success-state h3 {
+    margin: 1rem 0 0.5rem;
+    font-size: var(--text-xl);
+  }
+  
+  .success-state p {
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Completed Surveys List */
+  .completed-surveys-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .completed-survey-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+  
+  .completed-survey-row:hover {
+    background: var(--color-primary-soft);
+  }
+  
+  .completed-survey-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-success-soft);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent-dark);
+    flex-shrink: 0;
+  }
+  
+  .completed-survey-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .completed-survey-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .completed-survey-content h4 {
+    font-size: var(--text-md);
+    margin: 0 0 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .completed-survey-content p {
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  
+  .completed-survey-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+  
+  .completed-date {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  .survey-score {
+    display: flex;
+    align-items: baseline;
+    gap: 0.15rem;
+  }
+  
+  .score-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-primary-dark);
+    line-height: 1;
+  }
+  
+  .score-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  /* Empty State */
+  .empty-state-inline {
+    padding: 2rem;
+    text-align: center;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+  }
+  
+  .empty-state-inline p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .surveys-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .completed-survey-row {
+      flex-wrap: wrap;
+    }
+    
+    .completed-survey-meta {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-border-subtle);
+      margin-top: 0.5rem;
+    }
+  }
+</style>

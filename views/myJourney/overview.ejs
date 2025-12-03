@@ -1,257 +1,845 @@
 <!-- views/myJourney/overview.ejs -->
+<%
+  // Safely access data with defaults
+  const participant = typeof currentParticipant !== 'undefined' ? currentParticipant : {};
+  const firstName = participant.participant_first_name || 'Friend';
+  const profilePhoto = participant.profile_photo_path || null;
+  
+  // Get time of day greeting
+  const hour = new Date().getHours();
+  let greeting = 'Good morning';
+  if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+  else if (hour >= 17) greeting = 'Good evening';
+%>
 
-<section class="section">
-  <div class="shell">
-    <aside class="sidebar">
-      <%- include("../partials/_sidebarMyJourney") %>
-    </aside>
+<!-- Dashboard Header with Profile Banner -->
+<div class="dashboard-header">
+  <div class="profile-banner">
+    <div class="profile-banner-bg"></div>
+    <div class="profile-banner-content">
+      <div class="profile-avatar-large">
+        <% if (profilePhoto) { %>
+          <img src="<%= profilePhoto %>" alt="Profile photo" />
+        <% } else { %>
+          <span class="initials"><%= firstName.charAt(0) %></span>
+        <% } %>
+        <a href="/my-journey/account" class="profile-avatar-edit" title="Change photo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+        </a>
+      </div>
+      <div class="profile-banner-info">
+        <h1 class="profile-banner-greeting"><%= greeting %>, <%= firstName %>!</h1>
+        <p class="profile-banner-subtitle">Welcome to your Ella Rises journey</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <section>
-      <!-- Hero / Greeting -->
-      <header class="mb-3">
-        <div class="card card--featured" style="padding: 2rem 2.25rem;">
-          <div class="flex-between" style="gap: 2rem; flex-wrap: wrap;">
-            <div>
-              <p class="badge badge--primary" style="margin-bottom: 0.75rem;">
-                My Journey
-              </p>
-              <h1 class="mt-0" style="font-size: var(--text-3xl);">
-                Hi, <%= participant.participant_first_name || 'there' %> 👋
-              </h1>
-              <p class="text-muted" style="max-width: 520px;">
-                This is your Ella Rises journey space. See your upcoming events,
-                track your milestones, complete surveys, and celebrate how you rise.
-              </p>
+<!-- Quick Stats Row -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-icon stat-icon--events">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value"><%= eventsSummary.upcoming %></span>
+      <span class="stat-label">Upcoming Events</span>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon stat-icon--attended">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value"><%= eventsSummary.attended %></span>
+      <span class="stat-label">Events Attended</span>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon stat-icon--milestones">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="8" r="7"></circle>
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value"><%= milestoneSummary.achieved %></span>
+      <span class="stat-label">Milestones Achieved</span>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon stat-icon--surveys">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value"><%= pendingSurveys.length %></span>
+      <span class="stat-label">Surveys Pending</span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Dashboard Grid -->
+<div class="dashboard-grid">
+  <!-- Left Column -->
+  <div class="dashboard-column">
+    <!-- Upcoming Events Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Upcoming Events
+        </h2>
+        <a href="/my-journey/events" class="section-link">View all →</a>
+      </div>
+      
+      <% if (upcomingEvents.length > 0) { %>
+        <div class="event-list">
+          <% upcomingEvents.slice(0, 3).forEach(event => { %>
+            <a href="/my-journey/events/<%= event.registration_id || event.event_details_id %>" class="event-card-mini">
+              <div class="event-card-mini-date">
+                <span class="event-date-month"><%= event.event_month || 'TBD' %></span>
+                <span class="event-date-day"><%= event.event_day || '--' %></span>
+              </div>
+              <div class="event-card-mini-content">
+                <h4><%= event.event_name %></h4>
+                <p class="text-muted">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <%= event.event_time_start_formatted || 'Time TBD' %>
+                </p>
+                <p class="text-muted">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <%= event.event_location || 'Location TBD' %>
+                </p>
+              </div>
+              <span class="badge <%= event.registration_status === 'Registered' ? 'badge--accent' : 'badge--neutral' %>">
+                <%= event.registration_status || 'Open' %>
+              </span>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h4>No upcoming events</h4>
+          <p>Check out our events calendar to find something exciting!</p>
+          <a href="/events" class="btn btn-primary btn-sm">Browse Events</a>
+        </div>
+      <% } %>
+    </section>
+    
+    <!-- Surveys Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          Surveys
+        </h2>
+        <a href="/my-journey/surveys" class="section-link">View all →</a>
+      </div>
+      
+      <% if (pendingSurveys.length > 0) { %>
+        <div class="alert alert-info mb-2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>You have <%= pendingSurveys.length %> survey<%= pendingSurveys.length > 1 ? 's' : '' %> to complete</span>
+        </div>
+        <div class="survey-list">
+          <% pendingSurveys.slice(0, 2).forEach(survey => { %>
+            <div class="survey-card">
+              <div class="survey-card-content">
+                <h4><%= survey.event_name %></h4>
+                <p class="text-muted"><%= survey.event_date_formatted || 'Recently attended' %></p>
+              </div>
+              <a href="/my-journey/surveys/<%= survey.registration_id %>" class="btn btn-primary btn-sm">
+                Take Survey
+              </a>
             </div>
-
-            <!-- Quick stat chips -->
-            <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; min-width: 260px;">
-              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
-                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                  Upcoming events
-                </p>
-                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
-                  <%= upcomingEvents.length %>
-                </p>
-              </div>
-              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
-                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                  Milestones achieved
-                </p>
-                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
-                  <%= milestoneSummary.achieved %>
-                </p>
-              </div>
-              <div class="card" style="padding: 1rem 1.25rem; box-shadow: none; border-radius: var(--radius-lg);">
-                <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                  Surveys to complete
-                </p>
-                <p style="font-family: var(--font-heading); font-size: var(--text-2xl); margin: 0;">
-                  <%= pendingSurveyCount %>
-                </p>
-              </div>
-            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="success-state">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <p>You're all caught up! No pending surveys.</p>
+        </div>
+      <% } %>
+    </section>
+  </div>
+  
+  <!-- Right Column -->
+  <div class="dashboard-column">
+    <!-- Milestones Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+          Milestones
+        </h2>
+        <a href="/my-journey/milestones" class="section-link">View all →</a>
+      </div>
+      
+      <!-- Milestone Progress -->
+      <div class="milestone-progress">
+        <div class="milestone-progress-bar">
+          <div class="milestone-progress-fill" style="width: <%= milestoneSummary.achieved > 0 ? Math.round((milestoneSummary.achieved / (milestoneSummary.planned + milestoneSummary.inProgress + milestoneSummary.achieved)) * 100) : 0 %>%"></div>
+        </div>
+        <div class="milestone-progress-stats">
+          <div class="milestone-stat">
+            <span class="milestone-stat-value"><%= milestoneSummary.planned %></span>
+            <span class="milestone-stat-label">Planned</span>
+          </div>
+          <div class="milestone-stat">
+            <span class="milestone-stat-value"><%= milestoneSummary.inProgress %></span>
+            <span class="milestone-stat-label">In Progress</span>
+          </div>
+          <div class="milestone-stat milestone-stat--achieved">
+            <span class="milestone-stat-value"><%= milestoneSummary.achieved %></span>
+            <span class="milestone-stat-label">Achieved</span>
           </div>
         </div>
-      </header>
-
-      <!-- Main content grid: left = events, right = milestones and surveys -->
-      <div class="grid" style="grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr); gap: 2rem;">
-        <!-- Left column: upcoming + recent events -->
-        <div class="stack">
-          <!-- Upcoming events -->
-          <section>
-            <div class="flex-between mb-1" style="gap: 1rem; flex-wrap: wrap;">
-              <div>
-                <h2 class="heading-decorated mt-0">Upcoming events</h2>
-                <p class="text-muted mt-2">
-                  Events you are registered for in the coming weeks.
-                </p>
+      </div>
+      
+      <!-- Recent Achievements -->
+      <% if (recentAchievements.length > 0) { %>
+        <div class="achievements-list mt-3">
+          <h4 class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">Recent Achievements</h4>
+          <% recentAchievements.slice(0, 3).forEach(achievement => { %>
+            <div class="achievement-card">
+              <div class="achievement-icon">
+                <svg viewBox="0 0 24 24" fill="var(--color-coral)" stroke="var(--color-coral)" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
               </div>
-              <a href="/my-journey/events" class="btn btn-ghost">
-                View all
-              </a>
+              <div class="achievement-content">
+                <h4><%= achievement.milestone_title %></h4>
+                <p class="text-muted"><%= achievement.achieved_date_formatted || 'Recently achieved' %></p>
+              </div>
             </div>
-
-            <% if (upcomingEvents.length === 0) { %>
-              <div class="card">
-                <p class="text-muted mb-0">
-                  You do not have any upcoming events yet. Visit the public
-                  <a href="/events">events</a> page to see what is coming.
-                </p>
-              </div>
-            <% } else { %>
-              <div class="grid grid-2 mt-1">
-                <% upcomingEvents.forEach(ev => { %>
-                  <article class="card card--hoverable">
-                    <div class="flex-between" style="gap: 0.75rem; align-items: flex-start;">
-                      <div>
-                        <span class="badge badge--accent mb-1">
-                          <%= ev.event_type || 'Event' %>
-                        </span>
-                        <h3 class="mt-0" style="font-size: var(--text-lg);">
-                          <%= ev.event_name %>
-                        </h3>
-                        <p class="text-muted" style="font-size: var(--text-sm);">
-                          <%= ev.event_date_start_formatted %> ·
-                          <%= ev.event_location %>
-                        </p>
-                      </div>
-                      <div>
-                        <span class="badge badge--primary">
-                          <%= ev.registration_status || 'Registered' %>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="mt-1">
-                      <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-outline btn-sm">
-                        View details
-                      </a>
-                    </div>
-                  </article>
-                <% }) %>
-              </div>
-            <% } %>
-          </section>
-
-          <!-- Recent events -->
-          <section class="mt-3">
-            <div class="flex-between mb-1" style="gap: 1rem; flex-wrap: wrap;">
-              <div>
-                <h2 class="mt-0">Recent events</h2>
-                <p class="text-muted mt-2">
-                  Once you attend events, you will see them here along with your
-                  survey responses.
-                </p>
-              </div>
-              <a href="/my-journey/events#past" class="btn btn-ghost">
-                View event history
-              </a>
-            </div>
-
-            <% if (pastEvents.length === 0) { %>
-              <div class="card">
-                <p class="text-muted mb-0">
-                  No events in your history yet. After you attend an event, it will
-                  appear here.
-                </p>
-              </div>
-            <% } else { %>
-              <div class="grid grid-2 mt-1">
-                <% pastEvents.slice(0, 4).forEach(ev => { %>
-                  <article class="card card--hoverable">
-                    <h3 class="mt-0" style="font-size: var(--text-md);">
-                      <%= ev.event_name %>
-                    </h3>
-                    <p class="text-muted" style="font-size: var(--text-sm);">
-                      <%= ev.event_date_start_formatted %> ·
-                      <%= ev.event_location %>
-                    </p>
-                    <p class="text-muted" style="font-size: 0.85rem;">
-                      Status:
-                      <strong><%= ev.registration_status || 'Completed' %></strong>
-                      <% if (ev.survey_overall_score) { %>
-                        · Survey score:
-                        <strong><%= ev.survey_overall_score %></strong>
-                      <% } %>
-                    </p>
-                    <a href="/my-journey/events/<%= ev.registration_id %>" class="btn btn-ghost btn-sm" style="margin-left: -0.5rem; margin-top: 0.5rem;">
-                      View event →
-                    </a>
-                  </article>
-                <% }) %>
-              </div>
-            <% } %>
-          </section>
+          <% }) %>
         </div>
-
-        <!-- Right column: milestones + surveys -->
-        <div class="stack">
-          <!-- Milestones summary -->
-          <section>
-            <div class="card">
-              <div class="flex-between" style="gap: 1rem; align-items: flex-start;">
-                <div>
-                  <h2 class="mt-0">Milestones</h2>
-                  <p class="text-muted">
-                    Track your progress toward education and career goals.
-                  </p>
-                </div>
-                <a href="/my-journey/milestones" class="btn btn-outline btn-sm">
-                  Open milestones
-                </a>
-              </div>
-
-              <div class="grid mt-2" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;">
-                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
-                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                    Planned
-                  </p>
-                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
-                    <%= milestoneSummary.planned %>
-                  </p>
-                </div>
-                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
-                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                    In progress
-                  </p>
-                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
-                    <%= milestoneSummary.inProgress %>
-                  </p>
-                </div>
-                <div class="card" style="padding: 0.75rem 1rem; box-shadow: none;">
-                  <p class="text-muted" style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-                    Achieved
-                  </p>
-                  <p style="font-family: var(--font-heading); font-size: var(--text-xl); margin: 0;">
-                    <%= milestoneSummary.achieved %>
-                  </p>
-                </div>
-              </div>
-
-              <p class="text-muted mt-2" style="font-size: 0.9rem;">
-                You can view and update your milestones in more detail on the
-                Milestones page.
-              </p>
-            </div>
-          </section>
-
-          <!-- Surveys summary -->
-          <section>
-            <div class="card">
-              <div class="flex-between" style="gap: 1rem; align-items: center;">
-                <div>
-                  <h2 class="mt-0">Surveys</h2>
-                  <p class="text-muted">
-                    Share how events went so we can improve and celebrate what is working.
-                  </p>
-                </div>
-                <a href="/my-journey/surveys" class="btn btn-primary btn-sm">
-                  Go to surveys
-                </a>
-              </div>
-
-              <div class="mt-2">
-                <% if (pendingSurveyCount === 0) { %>
-                  <div class="alert alert-success">
-                    <span>✨ You are all caught up. Thank you for your feedback!</span>
-                  </div>
-                <% } else { %>
-                  <div class="alert alert-info">
-                    <span>
-                      You have <strong><%= pendingSurveyCount %></strong> survey<%= pendingSurveyCount === 1 ? '' : 's' %> waiting.
-                    </span>
-                  </div>
-                <% } %>
-                <p class="text-muted" style="font-size: 0.9rem;">
-                  Surveys usually take only a few minutes and help shape future
-                  Ella Rises experiences.
-                </p>
-              </div>
-            </div>
-          </section>
+      <% } else { %>
+        <div class="empty-state empty-state--compact mt-3">
+          <p>Start working on your milestones to see achievements here!</p>
+          <a href="/my-journey/milestones" class="btn btn-outline btn-sm">View Milestones</a>
         </div>
+      <% } %>
+    </section>
+    
+    <!-- Quick Actions -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Quick Actions
+        </h2>
+      </div>
+      
+      <div class="quick-actions">
+        <a href="/events" class="quick-action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          Find Events
+        </a>
+        <a href="/my-journey/milestones#add" class="quick-action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          Add Milestone
+        </a>
+        <a href="/my-journey/account" class="quick-action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Edit Profile
+        </a>
+        <a href="/my-journey/photos" class="quick-action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          View Photos
+        </a>
       </div>
     </section>
   </div>
-</section>
+</div>
+
+<style>
+  /* Dashboard Header / Profile Banner */
+  .dashboard-header {
+    margin: -2rem -2rem 2rem -2rem;
+  }
+  
+  .profile-banner {
+    position: relative;
+    padding: 2rem;
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    overflow: hidden;
+  }
+  
+  .profile-banner-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-lavender) 50%, var(--color-dusty-blue) 100%);
+    opacity: 0.6;
+  }
+  
+  .profile-banner-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 4px solid var(--color-surface);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .profile-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-avatar-large .initials {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-primary-dark);
+  }
+  
+  .profile-avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--color-primary-dark);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-surface);
+    transition: all var(--transition-fast);
+  }
+  
+  .profile-avatar-edit:hover {
+    transform: scale(1.1);
+    background: var(--color-accent-dark);
+  }
+  
+  .profile-banner-greeting {
+    font-size: var(--text-2xl);
+    margin: 0;
+    color: var(--color-text);
+  }
+  
+  .profile-banner-subtitle {
+    color: var(--color-text-muted);
+    margin: 0.25rem 0 0;
+  }
+  
+  /* Stats Row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+    transition: all var(--transition-base);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .stat-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .stat-icon--events {
+    background: rgba(153, 183, 198, 0.2);
+    color: var(--color-dusty-blue);
+  }
+  
+  .stat-icon--attended {
+    background: rgba(154, 181, 157, 0.2);
+    color: var(--color-accent-dark);
+  }
+  
+  .stat-icon--milestones {
+    background: rgba(244, 176, 146, 0.2);
+    color: var(--color-coral);
+  }
+  
+  .stat-icon--surveys {
+    background: rgba(151, 142, 196, 0.2);
+    color: var(--color-lavender);
+  }
+  
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    line-height: 1;
+    color: var(--color-text);
+  }
+  
+  .stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+  
+  /* Dashboard Grid */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .dashboard-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header h2 {
+    font-size: var(--text-lg);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .section-header h2 svg {
+    color: var(--color-text-muted);
+  }
+  
+  .section-link {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-primary-dark);
+  }
+  
+  .section-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Event Cards Mini */
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .event-card-mini {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+  }
+  
+  .event-card-mini:hover {
+    background: var(--color-primary-soft);
+    border-color: var(--color-primary);
+  }
+  
+  .event-card-mini-date {
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  
+  .event-date-month {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+  }
+  
+  .event-date-day {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    line-height: 1;
+  }
+  
+  .event-card-mini-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .event-card-mini-content h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .event-card-mini-content p {
+    font-size: var(--text-xs);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  
+  .event-card-mini .badge {
+    flex-shrink: 0;
+  }
+  
+  /* Survey Cards */
+  .survey-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .survey-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+  }
+  
+  .survey-card-content h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+  }
+  
+  .survey-card-content p {
+    font-size: var(--text-xs);
+    margin: 0;
+  }
+  
+  /* Milestone Progress */
+  .milestone-progress {
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+  }
+  
+  .milestone-progress-bar {
+    height: 8px;
+    background: var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  
+  .milestone-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-pill);
+    transition: width 0.5s ease-out;
+  }
+  
+  .milestone-progress-stats {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .milestone-stat {
+    text-align: center;
+  }
+  
+  .milestone-stat-value {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    line-height: 1;
+  }
+  
+  .milestone-stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  .milestone-stat--achieved .milestone-stat-value {
+    color: var(--color-accent-dark);
+  }
+  
+  /* Achievements */
+  .achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .achievement-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, rgba(244, 176, 146, 0.1) 0%, rgba(249, 175, 177, 0.1) 100%);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(244, 176, 146, 0.2);
+  }
+  
+  .achievement-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+  
+  .achievement-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .achievement-content h4 {
+    font-size: var(--text-sm);
+    margin: 0 0 0.15rem;
+  }
+  
+  .achievement-content p {
+    font-size: var(--text-xs);
+    margin: 0;
+  }
+  
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+  }
+  
+  .quick-action-btn:hover {
+    background: var(--color-primary-soft);
+    border-color: var(--color-primary);
+    color: var(--color-primary-dark);
+  }
+  
+  .quick-action-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Empty & Success States */
+  .empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  
+  .empty-state--compact {
+    padding: 1rem;
+  }
+  
+  .empty-state-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    color: var(--color-text-light);
+  }
+  
+  .empty-state-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .empty-state h4 {
+    margin: 0 0 0.5rem;
+    font-size: var(--text-md);
+  }
+  
+  .empty-state p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin: 0 0 1rem;
+  }
+  
+  .success-state {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--color-success-soft);
+    border-radius: var(--radius-md);
+  }
+  
+  .success-state p {
+    margin: 0.75rem 0 0;
+    color: var(--color-accent-dark);
+    font-size: var(--text-sm);
+  }
+  
+  /* Responsive */
+  @media (max-width: 1000px) {
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .dashboard-header {
+      margin: -1rem -1rem 1.5rem -1rem;
+    }
+    
+    .profile-banner {
+      padding: 1.5rem 1rem;
+    }
+    
+    .profile-banner-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .profile-avatar-large {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .stats-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    
+    .stat-card {
+      padding: 1rem;
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    
+    .quick-actions {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

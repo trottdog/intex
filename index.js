@@ -34,10 +34,11 @@ app.use(
       useDefaults: true,
       directives: {
         defaultSrc: ["'self'", "https://cdn.jsdelivr.net"],
-        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'","https://fonts.googleapis.com"], 
         connectSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
         imgSrc: ["'self'", "data:"],
-        styleSrc: ["'self'", "'unsafe-inline'"], // if you have inline styles
+        styleSrc: ["'self'", "'unsafe-inline'","https://fonts.googleapis.com"], // if you have inline styles
       },
     },
   })
@@ -94,7 +95,7 @@ app.use((req, res, next) => {
 // Routes
 app.use("/", publicRoutes);
 app.use("/", authRoutes);
-app.use("/", myJourneyRoutes);
+app.use("/my-Journey", myJourneyRoutes);
 
 // CSRF error handler
 app.use((err, req, res, next) => {

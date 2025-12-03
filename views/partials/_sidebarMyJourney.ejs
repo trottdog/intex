@@ -1,55 +1,140 @@
 <!-- views/partials/_sidebarMyJourney.ejs -->
-<div>
-  <div class="sidebar-title">My Journey</div>
+<%
+  const participant = typeof currentParticipant !== 'undefined' ? currentParticipant : {};
+  const user = typeof currentUser !== 'undefined' ? currentUser : (typeof participant !== 'undefined' ? participant : {});
+  const activeSection = typeof sidebarActive !== 'undefined' ? sidebarActive : 'overview';
+  
+  // Get initials for avatar fallback
+  const firstName = participant.participant_first_name || user.first_name || '';
+  const lastName = participant.participant_last_name || user.last_name || '';
+  const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || '?';
+  const displayName = firstName ? `${firstName} ${lastName}` : 'Welcome';
+  const email = participant.participant_email || user.email || '';
+  const profilePhoto = participant.profile_photo_path || user.profile_photo || null;
+  
+  // Badge counts (passed from routes)
+  const safePendingSurveyCount = typeof pendingSurveyCount !== 'undefined' ? pendingSurveyCount : 0;
+  const safeUpcomingEventCount = typeof upcomingEventCount !== 'undefined' ? upcomingEventCount : 0;
+%>
 
-  <ul class="sidebar-nav">
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey"
-        class="sidebar-link <%= sidebarActive === 'overview' ? 'sidebar-link--active' : '' %>"
-      >
-        Overview
-      </a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey/events"
-        class="sidebar-link <%= sidebarActive === 'events' ? 'sidebar-link--active' : '' %>"
-      >
-        Events
-      </a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey/milestones"
-        class="sidebar-link <%= sidebarActive === 'milestones' ? 'sidebar-link--active' : '' %>"
-      >
-        Milestones
-      </a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey/surveys"
-        class="sidebar-link <%= sidebarActive === 'surveys' ? 'sidebar-link--active' : '' %>"
-      >
-        Surveys
-      </a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey/photos"
-        class="sidebar-link <%= sidebarActive === 'photos' ? 'sidebar-link--active' : '' %>"
-      >
-        My Photos
-      </a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a
-        href="/my-journey/account"
-        class="sidebar-link <%= sidebarActive === 'account' ? 'sidebar-link--active' : '' %>"
-      >
-        Account
-      </a>
-    </li>
-  </ul>
+<!-- Profile Mini Card -->
+<div class="profile-mini">
+  <div class="profile-mini-photo">
+    <% if (profilePhoto) { %>
+      <img src="<%= profilePhoto %>" alt="<%= displayName %>" />
+    <% } else { %>
+      <span class="initials"><%= initials %></span>
+    <% } %>
+  </div>
+  <div>
+    <p class="profile-mini-name"><%= displayName %></p>
+    <% if (email) { %>
+      <p class="profile-mini-email"><%= email %></p>
+    <% } %>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav aria-label="My Journey navigation">
+  <div class="sidebar-section">
+    <p class="sidebar-section-title">My Journey</p>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a href="/my-journey" class="sidebar-link <%= activeSection === 'overview' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Overview
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a href="/my-journey/events" class="sidebar-link <%= activeSection === 'events' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Events
+          <% if (upcomingEventCount > 0) { %>
+            <span class="badge badge--accent"><%= safeUpcomingEventCount %></span>
+          <% } %>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a href="/my-journey/milestones" class="sidebar-link <%= activeSection === 'milestones' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+          Milestones
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a href="/my-journey/surveys" class="sidebar-link <%= activeSection === 'surveys' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          Surveys
+          <% if (pendingSurveyCount > 0) { %>
+            <span class="badge badge--primary"><%= safePendingSurveyCount %></span>
+          <% } %>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a href="/my-journey/photos" class="sidebar-link <%= activeSection === 'photos' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          My Photos
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="sidebar-section">
+    <p class="sidebar-section-title">Settings</p>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a href="/my-journey/account" class="sidebar-link <%= activeSection === 'account' ? 'sidebar-link--active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Account
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Quick Actions -->
+<div class="sidebar-actions">
+  <a href="/events" class="btn btn-outline w-full mb-2" style="justify-content: flex-start; gap: 0.5rem;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    Browse Events
+  </a>
+  <form action="/logout" method="POST">
+    <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
+    <button type="submit" class="btn btn-ghost w-full" style="justify-content: flex-start; gap: 0.5rem; color: var(--color-text-muted);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+      Log Out
+    </button>
+  </form>
 </div>

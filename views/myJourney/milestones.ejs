@@ -1,136 +1,994 @@
 <!-- views/myJourney/milestones.ejs -->
 
-<section class="section">
-  <div class="shell">
-    <aside class="sidebar">
-      <%- include("../partials/_sidebarMyJourney") %>
-    </aside>
-
-    <section>
-      <header class="mb-3">
-        <h1 class="mt-0">My Milestones</h1>
-        <p class="text-muted">
-          Track the educational and personal milestones you are working toward,
-          from attending workshops to applying for college and beyond.
-        </p>
-      </header>
-
-      <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem;">
-        <!-- Planned -->
-        <div class="card">
-          <h2 class="mt-0" style="font-size: var(--text-lg);">Planned</h2>
-          <p class="text-muted" style="font-size: var(--text-sm);">
-            Ideas and goals you plan to reach.
-          </p>
-
-          <% if (!milestonesPlanned || milestonesPlanned.length === 0) { %>
-            <p class="text-muted mt-2" style="font-size: var(--text-sm);">
-              No milestones planned yet. You can work with Ella Rises mentors to add some.
-            </p>
-          <% } else { %>
-            <div class="stack mt-2">
-              <% milestonesPlanned.forEach(m => { %>
-                <article class="card card--hoverable" style="padding: 1rem 1.25rem;">
-                  <p class="badge badge--neutral mb-1">
-                    <%= m.category || 'Milestone' %>
-                  </p>
-                  <h3 class="mt-0" style="font-size: var(--text-md);"><%= m.title %></h3>
-                  <% if (m.planned_date_formatted) { %>
-                    <p class="text-muted" style="font-size: var(--text-xs);">
-                      Planned date: <%= m.planned_date_formatted %>
-                    </p>
-                  <% } %>
-                  <% if (m.default_points) { %>
-                    <p class="text-muted" style="font-size: var(--text-xs);">
-                      Points: <%= m.default_points %>
-                    </p>
-                  <% } %>
-                  <% if (m.notes) { %>
-                    <p class="text-muted" style="font-size: var(--text-sm);">
-                      <%= m.notes %>
-                    </p>
-                  <% } %>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
-
-        <!-- In progress -->
-        <div class="card">
-          <h2 class="mt-0" style="font-size: var(--text-lg);">In progress</h2>
-          <p class="text-muted" style="font-size: var(--text-sm);">
-            Milestones you are actively working on.
-          </p>
-
-          <% if (!milestonesInProgress || milestonesInProgress.length === 0) { %>
-            <p class="text-muted mt-2" style="font-size: var(--text-sm);">
-              When you start on a goal, it will appear here.
-            </p>
-          <% } else { %>
-            <div class="stack mt-2">
-              <% milestonesInProgress.forEach(m => { %>
-                <article class="card card--hoverable" style="padding: 1rem 1.25rem;">
-                  <p class="badge badge--primary mb-1">
-                    <%= m.category || 'Milestone' %>
-                  </p>
-                  <h3 class="mt-0" style="font-size: var(--text-md);"><%= m.title %></h3>
-                  <% if (m.planned_date_formatted) { %>
-                    <p class="text-muted" style="font-size: var(--text-xs);">
-                      Target date: <%= m.planned_date_formatted %>
-                    </p>
-                  <% } %>
-                  <% if (m.progress_notes) { %>
-                    <p class="text-muted" style="font-size: var(--text-sm);">
-                      <%= m.progress_notes %>
-                    </p>
-                  <% } %>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
-
-        <!-- Achieved -->
-        <div class="card">
-          <h2 class="mt-0" style="font-size: var(--text-lg);">Achieved</h2>
-          <p class="text-muted" style="font-size: var(--text-sm);">
-            Milestones you have completed and can celebrate.
-          </p>
-
-          <% if (!milestonesAchieved || milestonesAchieved.length === 0) { %>
-            <p class="text-muted mt-2" style="font-size: var(--text-sm);">
-              Your achieved milestones will appear here. You got this.
-            </p>
-          <% } else { %>
-            <div class="stack mt-2">
-              <% milestonesAchieved.forEach(m => { %>
-                <article class="card card--hoverable" style="padding: 1rem 1.25rem;">
-                  <p class="badge badge--accent mb-1">
-                    <%= m.category || 'Milestone' %>
-                  </p>
-                  <h3 class="mt-0" style="font-size: var(--text-md);"><%= m.title %></h3>
-                  <% if (m.achieved_date_formatted) { %>
-                    <p class="text-muted" style="font-size: var(--text-xs);">
-                      Achieved: <%= m.achieved_date_formatted %>
-                    </p>
-                  <% } %>
-                  <% if (m.default_points) { %>
-                    <p class="text-muted" style="font-size: var(--text-xs);">
-                      Points earned: <%= m.default_points %>
-                    </p>
-                  <% } %>
-                  <% if (m.notes) { %>
-                    <p class="text-muted" style="font-size: var(--text-sm);">
-                      <%= m.notes %>
-                    </p>
-                  <% } %>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
-      </div>
-    </section>
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>My Milestones</h1>
+    <p class="page-header-subtitle">Track your goals, celebrate achievements, and see how far you've come</p>
   </div>
-</section>
+  <button class="btn btn-primary" onclick="openAddMilestoneModal()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="16"></line>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+    </svg>
+    Add Milestone
+  </button>
+</div>
+
+<!-- Progress Summary -->
+<div class="milestone-summary">
+  <div class="milestone-summary-progress">
+    <div class="progress-ring">
+      <%
+        const total = milestonesPlanned.length + milestonesInProgress.length + milestonesAchieved.length;
+        const achievedPercent = total > 0 ? Math.round((milestonesAchieved.length / total) * 100) : 0;
+      %>
+      <svg viewBox="0 0 120 120">
+        <circle class="progress-ring-bg" cx="60" cy="60" r="50" />
+        <circle class="progress-ring-fill" cx="60" cy="60" r="50" 
+          stroke-dasharray="314.159"
+          stroke-dashoffset="<%= 314.159 - (achievedPercent / 100) * 314.159 %>" />
+      </svg>
+      <div class="progress-ring-text">
+        <span class="progress-ring-value"><%= achievedPercent %>%</span>
+        <span class="progress-ring-label">Complete</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="milestone-summary-stats">
+    <div class="summary-stat">
+      <div class="summary-stat-icon summary-stat-icon--planned">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </div>
+      <div class="summary-stat-content">
+        <span class="summary-stat-value"><%= milestonesPlanned.length %></span>
+        <span class="summary-stat-label">Planned</span>
+      </div>
+    </div>
+    
+    <div class="summary-stat">
+      <div class="summary-stat-icon summary-stat-icon--progress">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="2" x2="12" y2="6"></line>
+          <line x1="12" y1="18" x2="12" y2="22"></line>
+          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+          <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+          <line x1="2" y1="12" x2="6" y2="12"></line>
+          <line x1="18" y1="12" x2="22" y2="12"></line>
+          <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+          <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+        </svg>
+      </div>
+      <div class="summary-stat-content">
+        <span class="summary-stat-value"><%= milestonesInProgress.length %></span>
+        <span class="summary-stat-label">In Progress</span>
+      </div>
+    </div>
+    
+    <div class="summary-stat">
+      <div class="summary-stat-icon summary-stat-icon--achieved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="7"></circle>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+        </svg>
+      </div>
+      <div class="summary-stat-content">
+        <span class="summary-stat-value"><%= milestonesAchieved.length %></span>
+        <span class="summary-stat-label">Achieved</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Milestones Sections -->
+<div class="milestones-container">
+  <!-- In Progress Section -->
+  <section class="milestone-section">
+    <div class="section-header">
+      <h2>
+        <span class="section-icon section-icon--progress">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="2" x2="12" y2="6"></line>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+          </svg>
+        </span>
+        In Progress
+      </h2>
+      <span class="section-count"><%= milestonesInProgress.length %></span>
+    </div>
+    
+    <% if (milestonesInProgress.length > 0) { %>
+      <div class="milestone-cards">
+        <% milestonesInProgress.forEach(milestone => { %>
+          <article class="milestone-card milestone-card--progress">
+            <div class="milestone-card-header">
+              <div class="milestone-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="milestone-card-actions">
+                <button class="btn-icon" onclick="openProgressModal(<%= milestone.participant_milestone_id %>)" title="Add progress note">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button class="btn-icon btn-icon--success" onclick="markAchieved(<%= milestone.participant_milestone_id %>)" title="Mark as achieved">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <h3 class="milestone-title"><%= milestone.milestone_title %></h3>
+            <p class="milestone-category"><%= milestone.milestone_category || 'General' %></p>
+            
+            <% if (milestone.milestone_description) { %>
+              <p class="milestone-desc"><%= milestone.milestone_description %></p>
+            <% } %>
+            
+            <% if (milestone.target_date) { %>
+              <div class="milestone-target">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Target: <%= milestone.target_date_formatted %>
+              </div>
+            <% } %>
+            
+            <% if (milestone.notes) { %>
+              <div class="milestone-notes">
+                <strong>Latest note:</strong> <%= milestone.notes %>
+              </div>
+            <% } %>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state-inline">
+        <p>No milestones in progress. Move a planned milestone here when you start working on it!</p>
+      </div>
+    <% } %>
+  </section>
+  
+  <!-- Planned Section -->
+  <section class="milestone-section">
+    <div class="section-header">
+      <h2>
+        <span class="section-icon section-icon--planned">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </span>
+        Planned
+      </h2>
+      <span class="section-count"><%= milestonesPlanned.length %></span>
+    </div>
+    
+    <% if (milestonesPlanned.length > 0) { %>
+      <div class="milestone-cards">
+        <% milestonesPlanned.forEach(milestone => { %>
+          <article class="milestone-card milestone-card--planned">
+            <div class="milestone-card-header">
+              <div class="milestone-icon milestone-icon--muted">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="milestone-card-actions">
+                <button class="btn-icon btn-icon--primary" onclick="startProgress(<%= milestone.participant_milestone_id %>)" title="Start working on this">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <h3 class="milestone-title"><%= milestone.milestone_title %></h3>
+            <p class="milestone-category"><%= milestone.milestone_category || 'General' %></p>
+            
+            <% if (milestone.milestone_description) { %>
+              <p class="milestone-desc"><%= milestone.milestone_description %></p>
+            <% } %>
+            
+            <% if (milestone.target_date) { %>
+              <div class="milestone-target">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Target: <%= milestone.target_date_formatted %>
+              </div>
+            <% } %>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state-inline">
+        <p>No planned milestones. Add one to start tracking your goals!</p>
+        <button class="btn btn-outline btn-sm" onclick="openAddMilestoneModal()">Add Milestone</button>
+      </div>
+    <% } %>
+  </section>
+  
+  <!-- Achieved Section (Trophy Case) -->
+  <section class="milestone-section milestone-section--achieved">
+    <div class="section-header">
+      <h2>
+        <span class="section-icon section-icon--achieved">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+        </span>
+        Trophy Case
+      </h2>
+      <span class="section-count section-count--gold"><%= milestonesAchieved.length %></span>
+    </div>
+    
+    <% if (milestonesAchieved.length > 0) { %>
+      <div class="trophy-grid">
+        <% milestonesAchieved.forEach(milestone => { %>
+          <article class="trophy-card">
+            <div class="trophy-icon">
+              <svg viewBox="0 0 24 24" fill="var(--color-coral)" stroke="var(--color-coral)" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h4 class="trophy-title"><%= milestone.milestone_title %></h4>
+            <p class="trophy-date">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <%= milestone.achieved_date_formatted || 'Achieved' %>
+            </p>
+            <% if (milestone.notes) { %>
+              <p class="trophy-reflection"><%= milestone.notes %></p>
+            <% } %>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state-trophy">
+        <div class="trophy-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+        </div>
+        <p>Your trophy case is waiting! Complete milestones to add achievements here.</p>
+      </div>
+    <% } %>
+  </section>
+</div>
+
+<!-- Add Milestone Modal -->
+<div id="addMilestoneModal" class="modal">
+  <div class="modal-overlay" onclick="closeAddMilestoneModal()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Add New Milestone</h3>
+      <button class="modal-close" onclick="closeAddMilestoneModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <form action="/my-journey/milestones" method="POST" class="modal-body">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      
+      <div class="form-group">
+        <label for="milestone_template_id">Milestone Type</label>
+        <select name="milestone_template_id" id="milestone_template_id" required>
+          <option value="">Select a milestone...</option>
+          <% availableTemplates.forEach(template => { %>
+            <option value="<%= template.milestone_template_id %>"><%= template.title %> (<%= template.category %>)</option>
+          <% }) %>
+          <option value="custom">Custom Milestone</option>
+        </select>
+      </div>
+      
+      <div class="form-group" id="customTitleGroup" style="display: none;">
+        <label for="custom_title">Custom Title</label>
+        <input type="text" name="custom_title" id="custom_title" placeholder="Enter your milestone title" />
+      </div>
+      
+      <div class="form-group">
+        <label for="target_date">Target Date (optional)</label>
+        <input type="date" name="target_date" id="target_date" />
+      </div>
+      
+      <div class="form-group">
+        <label for="notes">Notes (optional)</label>
+        <textarea name="notes" id="notes" rows="3" placeholder="What are you hoping to achieve? How will you work toward this?"></textarea>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeAddMilestoneModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Milestone</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Progress Note Modal -->
+<div id="progressModal" class="modal">
+  <div class="modal-overlay" onclick="closeProgressModal()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Add Progress Note</h3>
+      <button class="modal-close" onclick="closeProgressModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <form id="progressForm" method="POST" class="modal-body">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input type="hidden" name="milestone_id" id="progress_milestone_id" />
+      
+      <div class="form-group">
+        <label for="progress_notes">What progress have you made?</label>
+        <textarea name="notes" id="progress_notes" rows="4" placeholder="Describe your progress, challenges, or insights..." required></textarea>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeProgressModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Note</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* Page Header with Button */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .page-header-content {
+    flex: 1;
+  }
+  
+  /* Milestone Summary */
+  .milestone-summary {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .milestone-summary-progress {
+    flex-shrink: 0;
+  }
+  
+  .progress-ring {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .progress-ring svg {
+    transform: rotate(-90deg);
+  }
+  
+  .progress-ring-bg {
+    fill: none;
+    stroke: var(--color-border-subtle);
+    stroke-width: 8;
+  }
+  
+  .progress-ring-fill {
+    fill: none;
+    stroke: url(#progressGradient);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease-out;
+  }
+  
+  .progress-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .progress-ring-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+    line-height: 1;
+  }
+  
+  .progress-ring-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  
+  .milestone-summary-stats {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+  }
+  
+  .summary-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .summary-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .summary-stat-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .summary-stat-icon--planned {
+    background: rgba(153, 183, 198, 0.2);
+    color: var(--color-dusty-blue);
+  }
+  
+  .summary-stat-icon--progress {
+    background: rgba(151, 142, 196, 0.2);
+    color: var(--color-lavender);
+  }
+  
+  .summary-stat-icon--achieved {
+    background: rgba(244, 176, 146, 0.2);
+    color: var(--color-coral);
+  }
+  
+  .summary-stat-value {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    line-height: 1;
+  }
+  
+  .summary-stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  /* Milestone Sections */
+  .milestones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .milestone-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .milestone-section--achieved {
+    background: linear-gradient(135deg, rgba(244, 176, 146, 0.05) 0%, rgba(249, 175, 177, 0.05) 100%);
+    border-color: rgba(244, 176, 146, 0.2);
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-lg);
+    margin: 0;
+    flex: 1;
+  }
+  
+  .section-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .section-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .section-icon--planned {
+    background: rgba(153, 183, 198, 0.2);
+    color: var(--color-dusty-blue);
+  }
+  
+  .section-icon--progress {
+    background: rgba(151, 142, 196, 0.2);
+    color: var(--color-lavender);
+  }
+  
+  .section-icon--achieved {
+    background: rgba(244, 176, 146, 0.2);
+    color: var(--color-coral);
+  }
+  
+  .section-count {
+    background: var(--color-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+  
+  .section-count--gold {
+    background: rgba(244, 176, 146, 0.2);
+    color: var(--color-coral);
+  }
+  
+  /* Milestone Cards */
+  .milestone-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  .milestone-card {
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+  }
+  
+  .milestone-card:hover {
+    border-color: var(--color-primary-soft);
+  }
+  
+  .milestone-card--progress {
+    border-left: 3px solid var(--color-lavender);
+  }
+  
+  .milestone-card--planned {
+    border-left: 3px solid var(--color-dusty-blue);
+  }
+  
+  .milestone-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  
+  .milestone-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--color-coral);
+  }
+  
+  .milestone-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .milestone-icon--muted {
+    color: var(--color-text-light);
+  }
+  
+  .milestone-card-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-icon:hover {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+  }
+  
+  .btn-icon--success:hover {
+    background: var(--color-success-soft);
+    color: var(--color-accent-dark);
+  }
+  
+  .btn-icon--primary:hover {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+  }
+  
+  .milestone-title {
+    font-size: var(--text-md);
+    margin: 0 0 0.25rem;
+  }
+  
+  .milestone-category {
+    font-size: var(--text-xs);
+    color: var(--color-primary-dark);
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+  }
+  
+  .milestone-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+  
+  .milestone-target {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+  
+  .milestone-notes {
+    background: var(--color-surface);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+  }
+  
+  .milestone-notes strong {
+    color: var(--color-text);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Trophy Grid */
+  .trophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .trophy-card {
+    background: linear-gradient(135deg, rgba(244, 176, 146, 0.1) 0%, rgba(249, 175, 177, 0.1) 100%);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    text-align: center;
+    border: 1px solid rgba(244, 176, 146, 0.2);
+    transition: all var(--transition-fast);
+  }
+  
+  .trophy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .trophy-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 0.75rem;
+  }
+  
+  .trophy-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .trophy-title {
+    font-size: var(--text-sm);
+    margin: 0 0 0.35rem;
+  }
+  
+  .trophy-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  .trophy-reflection {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: 0.5rem 0 0;
+    font-style: italic;
+  }
+  
+  /* Empty States */
+  .empty-state-inline {
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+  }
+  
+  .empty-state-inline p {
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+  
+  .empty-state-trophy {
+    padding: 3rem;
+    text-align: center;
+  }
+  
+  .trophy-placeholder {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    color: var(--color-border-subtle);
+  }
+  
+  .trophy-placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .empty-state-trophy p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all var(--transition-base);
+  }
+  
+  .modal.open {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(58, 63, 59, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  
+  .modal-content {
+    position: relative;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-large);
+    transform: translateY(20px);
+    transition: transform var(--transition-base);
+  }
+  
+  .modal.open .modal-content {
+    transform: translateY(0);
+  }
+  
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+  }
+  
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+  
+  .modal-close:hover {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-subtle);
+    margin-top: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .page-header {
+      flex-direction: column;
+    }
+    
+    .milestone-summary {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+    
+    .milestone-summary-stats {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .summary-stat {
+      justify-content: center;
+    }
+    
+    .trophy-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<!-- SVG Gradient Definition -->
+<svg width="0" height="0" style="position: absolute;">
+  <defs>
+    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color: var(--color-accent);" />
+      <stop offset="100%" style="stop-color: var(--color-primary);" />
+    </linearGradient>
+  </defs>
+</svg>
+
+<script>
+  // Modal functions
+  function openAddMilestoneModal() {
+    document.getElementById('addMilestoneModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeAddMilestoneModal() {
+    document.getElementById('addMilestoneModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  
+  function openProgressModal(milestoneId) {
+    document.getElementById('progress_milestone_id').value = milestoneId;
+    document.getElementById('progressForm').action = '/my-journey/milestones/' + milestoneId + '/progress';
+    document.getElementById('progressModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeProgressModal() {
+    document.getElementById('progressModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  
+  // Start progress on a planned milestone
+  function startProgress(milestoneId) {
+    if (confirm('Start working on this milestone?')) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/my-journey/milestones/' + milestoneId + '/start';
+      
+      const csrf = document.createElement('input');
+      csrf.type = 'hidden';
+      csrf.name = '_csrf';
+      csrf.value = '<%= csrfToken %>';
+      form.appendChild(csrf);
+      
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+  
+  // Mark milestone as achieved
+  function markAchieved(milestoneId) {
+    if (confirm('Mark this milestone as achieved? 🎉')) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/my-journey/milestones/' + milestoneId + '/achieve';
+      
+      const csrf = document.createElement('input');
+      csrf.type = 'hidden';
+      csrf.name = '_csrf';
+      csrf.value = '<%= csrfToken %>';
+      form.appendChild(csrf);
+      
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+  
+  // Custom milestone toggle
+  document.getElementById('milestone_template_id').addEventListener('change', function() {
+    const customGroup = document.getElementById('customTitleGroup');
+    const customInput = document.getElementById('custom_title');
+    
+    if (this.value === 'custom') {
+      customGroup.style.display = 'block';
+      customInput.required = true;
+    } else {
+      customGroup.style.display = 'none';
+      customInput.required = false;
+    }
+  });
+  
+  // Close modals on escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeAddMilestoneModal();
+      closeProgressModal();
+    }
+  });
+</script>

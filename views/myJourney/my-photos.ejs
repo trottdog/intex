@@ -1,54 +1,351 @@
 <!-- views/myJourney/my-photos.ejs -->
+<%
+  const photos = Array.isArray(taggedPhotos) ? taggedPhotos : [];
+  const groupedPhotos = {};
+  
+  // Group photos by event
+  photos.forEach(photo => {
+    const eventName = photo.event_name || 'Other Photos';
+    if (!groupedPhotos[eventName]) {
+      groupedPhotos[eventName] = [];
+    }
+    groupedPhotos[eventName].push(photo);
+  });
+%>
 
-<section class="section">
-  <div class="shell">
-    <aside class="sidebar">
-      <%- include("../partials/_sidebarMyJourney") %>
-    </aside>
+<div class="page-header">
+  <h1>My Photos</h1>
+  <p class="page-header-subtitle">Photos from events you've attended</p>
+</div>
 
-    <section>
-      <header class="mb-3">
-        <h1 class="mt-0">My Photos</h1>
-        <p class="text-muted">
-          These are photos where you have been tagged during Ella Rises events.
-        </p>
-      </header>
-
-      <% if (!taggedPhotos || taggedPhotos.length === 0) { %>
-        <div class="card">
-          <p class="text-muted mb-0">
-            You have not been tagged in any photos yet. As photos are uploaded
-            and tagged, they will appear here.
-          </p>
-        </div>
-      <% } else { %>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
-          <% taggedPhotos.forEach(photo => { %>
-            <article class="card card--hoverable" style="padding: 0; overflow: hidden;">
-              <div style="width: 100%; aspect-ratio: 4 / 3; overflow: hidden;">
-                <img
-                  src="<%= photo.file_path %>"
-                  alt="<%= photo.alt_text || 'Ella Rises event photo' %>"
-                  style="width: 100%; height: 100%; object-fit: cover;"
-                />
-              </div>
-              <div style="padding: 1rem 1.25rem;">
-                <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: 0.25rem;">
-                  <%= photo.event_date_start_formatted || '' %>
-                </p>
-                <p style="font-weight: 600; margin-bottom: 0.25rem;">
-                  <%= photo.event_name || 'Ella Rises event' %>
-                </p>
-                <% if (photo.taken_at_formatted) { %>
-                  <p class="text-muted" style="font-size: var(--text-xs); margin: 0;">
-                    Taken: <%= photo.taken_at_formatted %>
-                  </p>
-                <% } %>
-              </div>
-            </article>
-          <% }) %>
-        </div>
-      <% } %>
-    </section>
+<% if (photos.length > 0) { %>
+  <!-- Photo Stats -->
+  <div class="photo-stats">
+    <div class="photo-stat">
+      <span class="photo-stat-value"><%= taggedPhotos.length %></span>
+      <span class="photo-stat-label">Total Photos</span>
+    </div>
+    <div class="photo-stat">
+      <span class="photo-stat-value"><%= Object.keys(groupedPhotos).length %></span>
+      <span class="photo-stat-label">Events</span>
+    </div>
   </div>
-</section>
+  
+  <!-- Photos by Event -->
+  <% Object.keys(groupedPhotos).forEach(eventName => { %>
+    <section class="photo-section">
+      <div class="section-header">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <%= eventName %>
+        </h2>
+        <span class="section-count"><%= groupedPhotos[eventName].length %> photos</span>
+      </div>
+      
+      <div class="photo-grid">
+        <% groupedPhotos[eventName].forEach((photo, index) => { %>
+          <div class="photo-card" onclick="openLightbox('<%= photo.file_path %>', '<%= eventName %>')">
+            <img src="<%= photo.file_path %>" alt="Photo from <%= eventName %>" loading="lazy" />
+            <div class="photo-overlay">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <% if (photo.uploaded_date_formatted) { %>
+              <span class="photo-date"><%= photo.uploaded_date_formatted %></span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  <% }) %>
+  
+<% } else { %>
+  <!-- Empty State -->
+  <div class="empty-state-large">
+    <div class="empty-state-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+    </div>
+    <h3>No photos yet</h3>
+    <p>Photos from events you attend will appear here once staff uploads and tags them. Keep attending events to build your photo collection!</p>
+    <a href="/events" class="btn btn-primary">Browse Events</a>
+  </div>
+<% } %>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <div class="lightbox-content">
+    <img id="lightbox-image" src="" alt="" />
+    <p id="lightbox-caption" class="lightbox-caption"></p>
+  </div>
+</div>
+
+<style>
+  /* Photo Stats */
+  .photo-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .photo-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .photo-stat-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-primary-dark);
+    line-height: 1;
+  }
+  
+  .photo-stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+  
+  /* Photo Section */
+  .photo-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  
+  .section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-lg);
+    margin: 0;
+  }
+  
+  .section-header h2 svg {
+    color: var(--color-text-muted);
+  }
+  
+  .section-count {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  
+  /* Photo Grid */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .photo-card {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+  
+  .photo-card:hover img {
+    transform: scale(1.05);
+  }
+  
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(58, 63, 59, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    color: #fff;
+  }
+  
+  .photo-card:hover .photo-overlay {
+    opacity: 1;
+  }
+  
+  .photo-date {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: var(--text-xs);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .photo-card:hover .photo-date {
+    opacity: 1;
+  }
+  
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all var(--transition-base);
+  }
+  
+  .lightbox.open {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+  }
+  
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    text-align: center;
+  }
+  
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-large);
+  }
+  
+  .lightbox-caption {
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 1rem;
+    font-size: var(--text-sm);
+  }
+  
+  /* Empty State */
+  .empty-state-large {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--color-border-subtle);
+  }
+  
+  .empty-state-large .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    color: var(--color-text-light);
+  }
+  
+  .empty-state-large .empty-state-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .empty-state-large h3 {
+    font-size: var(--text-xl);
+    margin: 0 0 0.75rem;
+  }
+  
+  .empty-state-large p {
+    color: var(--color-text-muted);
+    max-width: 450px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .photo-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  // Lightbox functions
+  function openLightbox(imageSrc, caption) {
+    document.getElementById('lightbox-image').src = imageSrc;
+    document.getElementById('lightbox-caption').textContent = caption;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  
+  // Close on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  });
+  
+  // Close on background click
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeLightbox();
+    }
+  });
+</script>
