@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const helmet = require("helmet");
 const csrf = require("csurf");
 const expressLayouts = require("express-ejs-layouts");
+const myJourneyRoutes = require("./routes/myJourneyRoutes");
 
 const publicRoutes = require("./routes/publicRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -27,7 +28,20 @@ app.set("layout", "layouts/main");
 app.use(express.static(path.join(__dirname, "public")));
 
 // Security headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        defaultSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        connectSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        imgSrc: ["'self'", "data:"],
+        styleSrc: ["'self'", "'unsafe-inline'"], // if you have inline styles
+      },
+    },
+  })
+);
 
 // Body parsing
 app.use(express.urlencoded({ extended: true }));
@@ -80,6 +94,7 @@ app.use((req, res, next) => {
 // Routes
 app.use("/", publicRoutes);
 app.use("/", authRoutes);
+app.use("/", myJourneyRoutes);
 
 // CSRF error handler
 app.use((err, req, res, next) => {

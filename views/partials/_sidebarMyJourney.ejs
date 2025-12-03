@@ -1,0 +1,55 @@
+<!-- views/partials/_sidebarMyJourney.ejs -->
+<div>
+  <div class="sidebar-title">My Journey</div>
+
+  <ul class="sidebar-nav">
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey"
+        class="sidebar-link <%= sidebarActive === 'overview' ? 'sidebar-link--active' : '' %>"
+      >
+        Overview
+      </a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey/events"
+        class="sidebar-link <%= sidebarActive === 'events' ? 'sidebar-link--active' : '' %>"
+      >
+        Events
+      </a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey/milestones"
+        class="sidebar-link <%= sidebarActive === 'milestones' ? 'sidebar-link--active' : '' %>"
+      >
+        Milestones
+      </a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey/surveys"
+        class="sidebar-link <%= sidebarActive === 'surveys' ? 'sidebar-link--active' : '' %>"
+      >
+        Surveys
+      </a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey/photos"
+        class="sidebar-link <%= sidebarActive === 'photos' ? 'sidebar-link--active' : '' %>"
+      >
+        My Photos
+      </a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a
+        href="/my-journey/account"
+        class="sidebar-link <%= sidebarActive === 'account' ? 'sidebar-link--active' : '' %>"
+      >
+        Account
+      </a>
+    </li>
+  </ul>
+</div>

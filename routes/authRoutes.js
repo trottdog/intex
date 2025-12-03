@@ -6,7 +6,6 @@ const db = require("../config/db");
 const router = express.Router();
 const SALT_ROUNDS = 10;
 
-// Helper: normalize emails
 function normalizeEmail(email) {
   return email ? email.trim().toLowerCase() : "";
 }
@@ -16,7 +15,6 @@ router.get("/login", (req, res) => {
   req.activeNav = "login";
   res.locals.activeNav = "login";
 
-  // If already logged in, redirect to appropriate home
   if (req.session.user) {
     if (req.session.user.role === "admin") {
       return res.redirect("/manage");
@@ -40,8 +38,9 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const user = await db("UserAccount")
-      .where({ Email: normalizedEmail })
+    // user_account (snake_case)
+    const user = await db("user_account")
+      .where({ email: normalizedEmail })
       .first();
 
     if (!user) {
@@ -49,34 +48,44 @@ router.post("/login", async (req, res) => {
       return res.redirect("/login");
     }
 
-    if (!user.IsActive) {
+    if (user.is_active === false) {
       req.flash("error", "This account is currently inactive.");
       return res.redirect("/login");
     }
 
-    const passwordsMatch = await bcrypt.compare(password, user.PasswordHash);
+    const passwordsMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordsMatch) {
       req.flash("error", "Invalid email or password.");
       return res.redirect("/login");
     }
 
-    // Lookup participant if exists
-    const participant = await db("ParticipantInfo")
-      .where({ UserID: user.UserID })
-      .first();
+    // Find participant (prefer by user_id, fallback by email)
+    let participant = null;
+
+    if (user.user_id) {
+      participant = await db("participant_info")
+        .where({ user_id: user.user_id })
+        .first();
+    }
+
+    if (!participant) {
+      participant = await db("participant_info")
+        .where({ participant_email: normalizedEmail })
+        .first();
+    }
 
     req.session.user = {
-      userId: user.UserID,
-      email: user.Email,
-      role: user.Role,
-      participantId: participant ? participant.ParticipantID : null,
-      firstName: participant ? participant.ParticipantFirstName : null,
-      lastName: participant ? participant.ParticipantLastName : null,
+      userId: user.user_id,
+      email: user.email,
+      role: user.role,
+      participantId: participant ? participant.participant_id : null,
+      firstName: participant ? participant.participant_first_name : null,
+      lastName: participant ? participant.participant_last_name : null,
     };
 
     req.flash("success", "Welcome back to Ella Rises.");
 
-    if (user.Role === "admin") {
+    if (user.role === "admin") {
       return res.redirect("/manage");
     }
     return res.redirect("/my-journey");
@@ -120,54 +129,85 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    // Check if email already used
-    const existingUser = await db("UserAccount")
-      .where({ Email: normalizedEmail })
-      .first();
+    await db.transaction(async (trx) => {
+      // 1) Does a user already exist with this email?
+      const existingUser = await trx("user_account")
+        .where({ email: normalizedEmail })
+        .first();
 
-    if (existingUser) {
-      req.flash("error", "An account with that email already exists.");
-      return res.redirect("/signup");
-    }
+      if (existingUser) {
+        req.flash("error", "An account with that email already exists. Please log in.");
+        throw new Error("ABORT_REDIRECT_LOGIN");
+      }
 
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+      // 2) Existing participant from old data?
+      const existingParticipant = await trx("participant_info")
+        .where({ participant_email: normalizedEmail })
+        .first();
 
-    // Create user account
-    const [newUser] = await db("UserAccount")
-      .insert({
-        Email: normalizedEmail,
-        PasswordHash: passwordHash,
-        Role: "user",
-        IsActive: true,
-      })
-      .returning("*");
+      const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-    // Create linked participant record
-    const [participant] = await db("ParticipantInfo")
-      .insert({
-        ParticipantEmail: normalizedEmail,
-        ParticipantFirstName: firstName.trim(),
-        ParticipantLastName: lastName.trim(),
-        UserID: newUser.UserID,
-      })
-      .returning("*");
+      // 3) Create the new user_account row
+      const [newUser] = await trx("user_account")
+        .insert({
+          email: normalizedEmail,
+          password_hash: passwordHash,
+          role: "user",
+          is_active: true,
+        })
+        .returning("*");
 
-    // Store in session
-    req.session.user = {
-      userId: newUser.UserID,
-      email: newUser.Email,
-      role: newUser.Role,
-      participantId: participant.ParticipantID,
-      firstName: participant.ParticipantFirstName,
-      lastName: participant.ParticipantLastName,
-    };
+      let participant;
 
-    req.flash("success", "Your account was created. Welcome to Ella Rises.");
+      if (existingParticipant) {
+        // Attach login to existing participant
+        const [updatedParticipant] = await trx("participant_info")
+          .where({ participant_id: existingParticipant.participant_id })
+          .update({
+            user_id: newUser.user_id,
+            participant_first_name:
+              existingParticipant.participant_first_name || firstName.trim(),
+            participant_last_name:
+              existingParticipant.participant_last_name || lastName.trim(),
+          })
+          .returning("*");
+
+        participant = updatedParticipant;
+      } else {
+        // Brand new participant
+        const [newParticipant] = await trx("participant_info")
+          .insert({
+            participant_email: normalizedEmail,
+            participant_first_name: firstName.trim(),
+            participant_last_name: lastName.trim(),
+            user_id: newUser.user_id,
+          })
+          .returning("*");
+
+        participant = newParticipant;
+      }
+
+      // 4) Save session
+      req.session.user = {
+        userId: newUser.user_id,
+        email: newUser.email,
+        role: newUser.role,
+        participantId: participant.participant_id,
+        firstName: participant.participant_first_name,
+        lastName: participant.participant_last_name,
+      };
+
+      req.flash("success", "Your account was created. Welcome to Ella Rises.");
+    });
+
     return res.redirect("/my-journey");
   } catch (err) {
+    if (err.message === "ABORT_REDIRECT_LOGIN") {
+      return res.redirect("/login");
+    }
+
     console.error("Error during signup:", err);
 
-    // Unique constraint on ParticipantEmail could also trigger here
     if (err.code === "23505") {
       req.flash("error", "An account or participant with that email already exists.");
     } else {

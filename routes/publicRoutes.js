@@ -4,7 +4,6 @@ const db = require("../config/db");
 
 const router = express.Router();
 
-// Helper to format dates nicely (simple version)
 function formatDate(date) {
   if (!date) return "";
   return new Date(date).toLocaleDateString("en-US", {
@@ -20,28 +19,27 @@ router.get("/", async (req, res) => {
   res.locals.activeNav = "home";
 
   try {
-    // Example: fetch a few upcoming events
-    const events = await db("EventDetails")
-      .leftJoin("EventTemplates", "EventDetails.EventTemplateID", "EventTemplates.EventTemplateID")
+    const events = await db("event_details")
+      .leftJoin("event_templates", "event_details.event_template_id", "event_templates.event_template_id")
       .select(
-        "EventDetails.EventDetailsID",
-        "EventDetails.EventName",
-        "EventDetails.EventDateStart",
-        "EventDetails.EventLocation",
-        "EventTemplates.EventType",
-        "EventTemplates.EventDescription"
+        "event_details.event_details_id",
+        "event_details.event_name",
+        "event_details.event_date_start",
+        "event_details.event_location",
+        "event_templates.event_type",
+        "event_templates.event_description"
       )
-      .orderBy("EventDetails.EventDateStart", "asc")
+      .orderBy("event_details.event_date_start", "asc")
       .limit(6);
 
     const mappedEvents = events.map((e) => ({
-      EventDetailsID: e.EventDetailsID,
-      EventName: e.EventName,
-      EventDateStartFormatted: formatDate(e.EventDateStart),
-      EventLocation: e.EventLocation,
-      EventType: e.EventType || "Event",
-      EventDescriptionShort: e.EventDescription
-        ? e.EventDescription.slice(0, 120) + (e.EventDescription.length > 120 ? "…" : "")
+      EventDetailsID: e.event_details_id,
+      EventName: e.event_name,
+      EventDateStartFormatted: formatDate(e.event_date_start),
+      EventLocation: e.event_location,
+      EventType: e.event_type || "Event",
+      EventDescriptionShort: e.event_description
+        ? e.event_description.slice(0, 120) + (e.event_description.length > 120 ? "…" : "")
         : "",
     }));
 
@@ -84,26 +82,26 @@ router.get("/events", async (req, res) => {
   res.locals.activeNav = "events";
 
   try {
-    const events = await db("EventDetails")
-      .leftJoin("EventTemplates", "EventDetails.EventTemplateID", "EventTemplates.EventTemplateID")
+    const events = await db("event_details")
+      .leftJoin("event_templates", "event_details.event_template_id", "event_templates.event_template_id")
       .select(
-        "EventDetails.EventDetailsID",
-        "EventDetails.EventName",
-        "EventDetails.EventDateStart",
-        "EventDetails.EventLocation",
-        "EventTemplates.EventType",
-        "EventTemplates.EventDescription"
+        "event_details.event_details_id",
+        "event_details.event_name",
+        "event_details.event_date_start",
+        "event_details.event_location",
+        "event_templates.event_type",
+        "event_templates.event_description"
       )
-      .orderBy("EventDetails.EventDateStart", "asc");
+      .orderBy("event_details.event_date_start", "asc");
 
     const mappedEvents = events.map((e) => ({
-      EventDetailsID: e.EventDetailsID,
-      EventName: e.EventName,
-      EventDateStartFormatted: formatDate(e.EventDateStart),
-      EventLocation: e.EventLocation,
-      EventType: e.EventType || "Event",
-      EventDescriptionShort: e.EventDescription
-        ? e.EventDescription.slice(0, 140) + (e.EventDescription.length > 140 ? "…" : "")
+      EventDetailsID: e.event_details_id,
+      EventName: e.event_name,
+      EventDateStartFormatted: formatDate(e.event_date_start),
+      EventLocation: e.event_location,
+      EventType: e.event_type || "Event",
+      EventDescriptionShort: e.event_description
+        ? e.event_description.slice(0, 140) + (e.event_description.length > 140 ? "…" : "")
         : "",
     }));
 
@@ -132,7 +130,6 @@ router.get("/get-involved", (req, res) => {
 
 // DONATE
 router.get("/donate", (req, res) => {
-  // Donate is visually separate, but we still consider nav context
   res.render("public/donate", {
     pageTitle: "Donate | Ella Rises",
   });

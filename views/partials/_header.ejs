@@ -1,4 +1,7 @@
 <!-- views/partials/_header.ejs -->
+
+<% const currentUser = typeof user !== "undefined" && user ? user : null; %>
+
 <div class="brand">
   <div class="brand-logo">
     <img src="/images/logo.png" alt="Ella Rises logo" />
@@ -16,12 +19,12 @@
   </div>
 
   <div class="nav-group">
-    <% if (user && user.Role === 'user') { %>
-      <a href="/my-journey" class="nav-link nav-trigger <%= activeNav === 'my-journey' ? 'nav-link--active' : '' %>">
+    <% if (currentUser && currentUser.role === 'user') { %>
+      <a href="/my-journey" class="nav-link <%= activeNav === 'my-journey' ? 'nav-link--active' : '' %>">
         My Journey
       </a>
-    <% } else if (user && user.Role === 'admin') { %>
-      <a href="/manage" class="nav-link nav-trigger <%= activeNav === 'manage' ? 'nav-link--active' : '' %>">
+    <% } else if (currentUser && currentUser.role === 'admin') { %>
+      <a href="/manage" class="nav-link <%= activeNav === 'manage' ? 'nav-link--active' : '' %>">
         Manage
       </a>
     <% } else { %>
@@ -29,7 +32,7 @@
       <a href="/signup" class="nav-link <%= activeNav === 'signup' ? 'nav-link--active' : '' %>">Sign Up</a>
     <% } %>
 
-    <a href="/donate" class="btn btn-primary" style="margin-left: 0.5rem;">
+    <a href="/donate" class="btn btn-primary" style="margin-left: 0.25rem;">
       Donate
     </a>
   </div>

@@ -1,0 +1,124 @@
+<!-- views/myJourney/overview.ejs -->
+
+<section class="section">
+  <div class="shell">
+    <aside class="sidebar">
+      <%- include("../partials/_sidebarMyJourney") %>
+    </aside>
+
+    <section>
+      <header class="mb-2">
+        <h1>Hi, <%= participant.participant_first_name || 'there' %> 👋</h1>
+        <p class="text-muted">
+          This is your Ella Rises journey. Here you can see your upcoming events,
+          past experiences, milestones and surveys.
+        </p>
+      </header>
+
+      <!-- Top summary cards -->
+      <div class="grid grid-3 mb-3">
+        <div class="card">
+          <p class="text-muted" style="font-size: 0.8rem;">Upcoming events</p>
+          <h2><%= upcomingEvents.length %></h2>
+          <p class="text-muted" style="font-size: 0.85rem;">
+            Events you are registered for in the coming weeks.
+          </p>
+        </div>
+
+        <div class="card">
+          <p class="text-muted" style="font-size: 0.8rem;">Milestones achieved</p>
+          <h2><%= milestoneSummary.achieved %></h2>
+          <p class="text-muted" style="font-size: 0.85rem;">
+            Milestones you’ve already marked as achieved.
+          </p>
+        </div>
+
+        <div class="card">
+          <p class="text-muted" style="font-size: 0.8rem;">Surveys to complete</p>
+          <h2><%= pendingSurveyCount %></h2>
+          <p class="text-muted" style="font-size: 0.85rem;">
+            Help Ella Rises improve by sharing how events went.
+          </p>
+        </div>
+      </div>
+
+      <!-- Upcoming events -->
+      <section class="mb-3">
+        <div class="stack">
+          <h2>Upcoming events</h2>
+          <% if (upcomingEvents.length === 0) { %>
+            <p class="text-muted">
+              You don't have any upcoming events yet. Visit the events page to see
+              what’s coming soon.
+            </p>
+          <% } else { %>
+            <div class="grid grid-2 mt-1">
+              <% upcomingEvents.forEach(ev => { %>
+                <article class="card card-event card--hoverable">
+                  <div>
+                    <h3 class="mt-0"><%= ev.event_name %></h3>
+                    <p class="text-muted">
+                      <%= ev.event_date_start_formatted %> · <%= ev.event_location %>
+                    </p>
+                  </div>
+                  <p class="mt-1 text-muted">
+                    Status: <%= ev.registration_status || 'Registered' %>
+                  </p>
+                </article>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- Recent events -->
+      <section class="mb-3">
+        <div class="stack">
+          <h2>Recent events</h2>
+          <% if (pastEvents.length === 0) { %>
+            <p class="text-muted">
+              Once you’ve attended events, you’ll see them here along with your
+              survey responses.
+            </p>
+          <% } else { %>
+            <div class="grid grid-2 mt-1">
+              <% pastEvents.forEach(ev => { %>
+                <article class="card card--hoverable">
+                  <h3 class="mt-0"><%= ev.event_name %></h3>
+                  <p class="text-muted">
+                    <%= ev.event_date_start_formatted %> · <%= ev.event_location %>
+                  </p>
+                  <p class="text-muted" style="font-size: 0.9rem;">
+                    Status: <%= ev.registration_status || 'Completed' %>
+                    <% if (ev.survey_overall_score) { %>
+                      · Survey score: <%= ev.survey_overall_score %>
+                    <% } %>
+                  </p>
+                </article>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- Milestone summary -->
+      <section class="mb-3">
+        <div class="card">
+          <h2>Milestones</h2>
+          <p class="text-muted">
+            Planned: <strong><%= milestoneSummary.planned %></strong> ·
+            In progress: <strong><%= milestoneSummary.inProgress %></strong> ·
+            Achieved: <strong><%= milestoneSummary.achieved %></strong>
+          </p>
+          <p class="text-muted" style="font-size: 0.9rem;">
+            You’ll be able to view and update your milestones in more detail on
+            the Milestones page.
+          </p>
+          <a href="/my-journey/milestones" class="btn btn-outline mt-1">
+            View milestones
+          </a>
+        </div>
+      </section>
+    </section>
+  </div>
+</section>
