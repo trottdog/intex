@@ -1,75 +1,76 @@
 <!-- views/partials/_footer.ejs -->
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <!-- Programs -->
-      <div>
-        <h4 class="footer-heading">Programs</h4>
-        <ul class="footer-links">
-          <li><a href="/programs#ballet-folklorico">Ballet Folklorico</a></li>
-          <li><a href="/programs#mariachi">Mariachi</a></li>
-          <li><a href="/programs#steam">STEAM Workshops</a></li>
-          <li><a href="/programs#summit">Summit + Pathways</a></li>
-        </ul>
+<div class="container">
+  <div class="footer-grid">
+    <!-- Brand Column -->
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <img src="/images/logo.png" alt="Ella Rises logo" />
       </div>
-
-      <!-- About -->
-      <div>
-        <h4 class="footer-heading">About</h4>
-        <ul class="footer-links">
-          <li><a href="/about#mission">Our Mission</a></li>
-          <li><a href="/about#team">Meet the Team</a></li>
-          <li><a href="/impact">Impact</a></li>
-          <li>
-            <a href="https://www.ellarises.org/press" target="_blank" rel="noopener noreferrer">
-              Press
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Get Involved -->
-      <div>
-        <h4 class="footer-heading">Get Involved</h4>
-        <ul class="footer-links">
-          <li><a href="/donate">Donate</a></li>
-          <li><a href="/get-involved">Volunteer</a></li>
-          <li><a href="/events">Events</a></li>
-        </ul>
-      </div>
-
-      <!-- Social on the right -->
-      <div class="footer-social footer-social-right">
-        <a
-          href="https://www.instagram.com/ellarises"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Follow us on Instagram"
-        >
-          <svg viewBox="0 0 24 24">
-            <path
-              d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3A5.25 5.25 0 1 1 6.75 11.75 5.26 5.26 0 0 1 12 6.5zm0 1.5A3.75 3.75 0 1 0 15.75 11.75 3.75 3.75 0 0 0 12 8zm5.1-2.4a1.05 1.05 0 1 1-1.05 1.05 1.05 1.05 0 0 1 1.05-1.05z"
-            />
+      <p>
+        Empowering young Latinas to pursue higher education through culturally 
+        rooted programs in mariachi, ballet folklorico, and STEAM.
+      </p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/ellarises" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
           </svg>
         </a>
-        <a
-          href="https://www.facebook.com/EllaRises"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Follow us on Facebook"
-        >
-          <svg viewBox="0 0 24 24">
-            <path
-              d="M13.5 21.5v-7h2.25a.75.75 0 0 0 .74-.64l.38-2.5a.75.75 0 0 0-.74-.86H13.5V8.25c0-.72.24-1.25 1.4-1.25h1.3a.75.75 0 0 0 .75-.75V3.9a.75.75 0 0 0-.7-.75 23.5 23.5 0 0 0-2.08-.1c-2.33 0-3.92 1.42-3.92 4.03v2.37H7.75a.75.75 0 0 0-.75.75v2.5a.75.75 0 0 0 .75.75h2.5v7h3.25z"
-            />
+        <a href="https://www.instagram.com/ellarises" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="#3A3F3B" stroke-width="1.5"/>
+            <circle cx="17.5" cy="6.5" r="1.5" fill="#3A3F3B"/>
+          </svg>
+        </a>
+        <a href="mailto:nadia@ellarises.org" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
           </svg>
         </a>
       </div>
     </div>
-
-    <div class="footer-bottom">
-      <p>© <%= new Date().getFullYear() %> Ella Rises. All rights reserved. Provo, Utah.</p>
+    
+    <!-- Programs Column -->
+    <div>
+      <h4 class="footer-heading">Programs</h4>
+      <ul class="footer-links">
+        <li><a href="/programs#ballet-folklorico">Ballet Folklorico</a></li>
+        <li><a href="/programs#mariachi">Mariachi</a></li>
+        <li><a href="/programs#steam">STEAM Workshops</a></li>
+        <li><a href="/programs#summit">Summit + Pathways</a></li>
+      </ul>
+    </div>
+    
+    <!-- About Column -->
+    <div>
+      <h4 class="footer-heading">About</h4>
+      <ul class="footer-links">
+        <li><a href="/about#mission">Our Mission</a></li>
+        <li><a href="/about#team">Meet the Team</a></li>
+        <li><a href="/impact">Impact</a></li>
+        <li><a href="/events">Events</a></li>
+      </ul>
+    </div>
+    
+    <!-- Get Involved Column -->
+    <div>
+      <h4 class="footer-heading">Get Involved</h4>
+      <ul class="footer-links">
+        <li><a href="/donate">Donate</a></li>
+        <li><a href="/get-involved">Volunteer</a></li>
+        <li><a href="/signup">Enroll</a></li>
+        <li><a href="mailto:nadia@ellarises.org">Contact Us</a></li>
+      </ul>
     </div>
   </div>
-</footer>
+  
+  <div class="footer-bottom">
+    <p>&copy; <%= new Date().getFullYear() %> Ella Rises. All rights reserved.</p>
+    <p>
+      Ella Rises is a 501(c)(3) nonprofit organization. Donations are tax-deductible.
+    </p>
+  </div>
+</div>

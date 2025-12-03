@@ -1,23 +1,37 @@
 <!-- views/partials/_head.ejs -->
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="Ella Rises empowers young Latina women to pursue higher education through mariachi, ballet folklorico, and STEAM programs." />
-<meta name="theme-color" content="#F9AFB1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-<title><%= typeof pageTitle !== 'undefined' ? pageTitle : "Ella Rises" %></title>
+<!-- SEO Meta Tags -->
+<title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' | Ella Rises' : 'Ella Rises - Empowering Latina Youth' %></title>
+<meta name="description" content="<%= typeof pageDescription !== 'undefined' ? pageDescription : 'Ella Rises empowers young Latinas to pursue higher education through mariachi, ballet folklorico, and STEAM programs.' %>" />
+<meta name="keywords" content="Latina youth, empowerment, STEAM, mariachi, ballet folklorico, Utah, nonprofit, education, mentorship" />
+<meta name="author" content="Ella Rises" />
+
+<!-- Open Graph / Social Media -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle + ' | Ella Rises' : 'Ella Rises - Empowering Latina Youth' %>" />
+<meta property="og:description" content="<%= typeof pageDescription !== 'undefined' ? pageDescription : 'Ella Rises empowers young Latinas to pursue higher education through mariachi, ballet folklorico, and STEAM programs.' %>" />
+<meta property="og:image" content="/images/logo.png" />
+<meta property="og:url" content="https://ellarises.is404.net" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle + ' | Ella Rises' : 'Ella Rises' %>" />
+<meta name="twitter:description" content="<%= typeof pageDescription !== 'undefined' ? pageDescription : 'Empowering young Latinas through culture, art, and education.' %>" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/images/favicon.png" />
+<link rel="apple-touch-icon" href="/images/logo.png" />
 
 <!-- Preconnect to Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-<!-- Google Fonts - DM Serif Display & Montserrat -->
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-<!-- Main Stylesheet -->
+<!-- Styles -->
 <link rel="stylesheet" href="/css/global.css" />
 
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="/images/logo.png" />
-
-<!-- Chart.js for any charts on landing/impact pages -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
+  <style><%= extraStyles %></style>
+<% } %>

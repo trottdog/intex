@@ -1,138 +1,170 @@
 <!-- views/public/programs.ejs -->
 
-<!-- Hero Section -->
-<section class="hero" style="padding-bottom: 3rem;">
+<!-- Hero Banner -->
+<section class="section--hero" style="padding-top: 7rem; text-align: center;">
   <div class="container">
-    <div class="hero-content" style="max-width: 800px;">
-      <span class="hero-kicker">Our Programs</span>
-      <h1 class="hero-title">
-        Art, music & STEM that <span>transforms</span> lives
-      </h1>
-      <p class="hero-subtitle" style="max-width: 650px;">
-        Ella Rises programs are designed to uplift Latina youth ages 11-18 through art, 
-        culture, STEAM, and education. Families can choose one or multiple programs 
-        that best support their daughters' interests and goals.
-      </p>
-      <div class="hero-actions">
-        <a href="/signup" class="btn btn-primary btn-lg">Enroll Now</a>
-        <a href="/events" class="btn btn-outline btn-lg">View Schedule</a>
-      </div>
+    <span class="hero-kicker">Our Programs</span>
+    <h1>Discover Your Path</h1>
+    <p class="text-muted" style="max-width: 600px; margin: 1.5rem auto 0; font-size: var(--text-lg);">
+      Ella Rises programs are designed to uplift Latina youth ages 11–18 through art, 
+      culture, STEAM, and education. Families can choose one or multiple programs.
+    </p>
+  </div>
+</section>
+
+<!-- Programs Overview Cards -->
+<section class="section--tight">
+  <div class="container">
+    <div class="programs-grid stagger-children">
+      <!-- Ballet Folklorico Card -->
+      <a href="#ballet-folklorico" class="program-card" style="text-decoration: none;">
+        <div class="program-card-bg">
+          <img src="/images/ballet_folklorico/BalletGirls.jpg" alt="Ballet Folklorico dancers" />
+        </div>
+        <div class="program-card-overlay"></div>
+        <div class="program-card-content">
+          <h3 class="program-card-title">Ballet Folklorico</h3>
+          <div class="program-card-expanded">
+            <p class="program-card-desc">
+              Joy, confidence, and creative self-expression through Latin American Folk dance.
+            </p>
+            <div class="program-card-actions">
+              <span class="btn btn-primary btn-sm">Learn More ↓</span>
+            </div>
+          </div>
+        </div>
+      </a>
+      
+      <!-- Mariachi Card -->
+      <a href="#mariachi" class="program-card" style="text-decoration: none;">
+        <div class="program-card-bg">
+          <img src="/images/mariachi/mariachiGirl.jpg" alt="Mariachi student" />
+        </div>
+        <div class="program-card-overlay"></div>
+        <div class="program-card-content">
+          <h3 class="program-card-title">Mariachi</h3>
+          <div class="program-card-expanded">
+            <p class="program-card-desc">
+              Join our female mariachi band! All levels of music proficiency welcome.
+            </p>
+            <div class="program-card-actions">
+              <span class="btn btn-primary btn-sm">Learn More ↓</span>
+            </div>
+          </div>
+        </div>
+      </a>
+      
+      <!-- Summit Card -->
+      <a href="#summit" class="program-card" style="text-decoration: none;">
+        <div class="program-card-bg">
+          <img src="/images/general/edu1.jpg" alt="Summit day camp" />
+        </div>
+        <div class="program-card-overlay"></div>
+        <div class="program-card-content">
+          <h3 class="program-card-title">Summit + Pathways</h3>
+          <div class="program-card-expanded">
+            <p class="program-card-desc">
+              Day camp with art, STEM, education focus, and college tours!
+            </p>
+            <div class="program-card-actions">
+              <span class="btn btn-primary btn-sm">Learn More ↓</span>
+            </div>
+          </div>
+        </div>
+      </a>
+      
+      <!-- STEAM Card -->
+      <a href="#steam" class="program-card" style="text-decoration: none;">
+        <div class="program-card-bg">
+          <img src="/images/steam/stem1.jpg" alt="STEAM workshop" />
+        </div>
+        <div class="program-card-overlay"></div>
+        <div class="program-card-content">
+          <h3 class="program-card-title">STEAM</h3>
+          <div class="program-card-expanded">
+            <p class="program-card-desc">
+              Explore science, technology, engineering, art, and math through hands-on workshops.
+            </p>
+            <div class="program-card-actions">
+              <span class="btn btn-primary btn-sm">Learn More ↓</span>
+            </div>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- Program Overview Cards -->
-<section class="section--tight">
-  <div class="container">
-    <div class="grid grid-4" style="gap: 1rem;">
-      <a href="#ballet-folklorico" class="card card--hoverable text-center" style="text-decoration: none;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-primary-soft); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
-        </div>
-        <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Ballet Folklorico</h4>
-        <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">Mondays at 7pm</p>
-      </a>
-      
-      <a href="#mariachi" class="card card--hoverable text-center" style="text-decoration: none;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-accent-soft); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-        </div>
-        <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Mariachi</h4>
-        <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">Mondays 5:30-6:45pm</p>
-      </a>
-      
-      <a href="#steam" class="card card--hoverable text-center" style="text-decoration: none;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(153, 183, 198, 0.3); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-          </svg>
-        </div>
-        <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">STEAM</h4>
-        <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">Virtual & In-Person</p>
-      </a>
-      
-      <a href="#summit" class="card card--hoverable text-center" style="text-decoration: none;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(151, 142, 196, 0.3); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-          </svg>
-        </div>
-        <h4 style="font-size: var(--text-md); margin-bottom: 0.25rem;">Summit + Pathways</h4>
-        <p class="text-muted" style="font-size: var(--text-sm); margin: 0;">Day Camp Experience</p>
-      </a>
-    </div>
-  </div>
-</section>
+<!-- Detailed Program Sections -->
 
 <!-- Ballet Folklorico -->
 <section id="ballet-folklorico" class="section" style="scroll-margin-top: 100px;">
   <div class="container">
     <div class="grid" style="grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center;">
-      <div style="position: relative;">
+      <div class="program-detail-media" style="position: relative;">
         <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-large);">
-          <img src="/images/ballet_folklorico/ballet2.jpg" alt="Ballet Folklorico dancers in traditional dress" style="width: 100%; height: auto;" />
+          <img 
+            src="/images/ballet_folklorico/ballet2.jpg" 
+            alt="Ella Rises Ballet Folklorico practice" 
+            style="width: 100%; height: 450px; object-fit: cover;"
+          />
         </div>
-        <!-- Floating accent card -->
-        <div class="card" style="position: absolute; bottom: -20px; right: -20px; padding: 1rem 1.5rem; background: var(--color-primary-dark); color: white; border-radius: var(--radius-lg);">
-          <div style="font-size: var(--text-2xl); font-weight: 700;">11-18</div>
-          <div style="font-size: var(--text-sm); opacity: 0.9;">years old</div>
-        </div>
+        <!-- Decorative accent -->
+        <div style="
+          position: absolute;
+          bottom: -20px;
+          right: -20px;
+          width: 120px;
+          height: 120px;
+          background: var(--color-primary-soft);
+          border-radius: var(--radius-xl);
+          z-index: -1;
+        "></div>
       </div>
       
-      <div>
+      <div class="program-detail-content">
         <span class="badge badge--primary mb-2">Cultural Arts</span>
         <h2 class="heading-decorated">Ballet Folklorico</h2>
-        <p class="text-muted mt-4" style="font-size: var(--text-lg);">
-          Our art program fosters joy, confidence, and creative self-expression 
-          rooted in culture through Latin American Folk dance.
+        
+        <p class="mt-3" style="font-size: var(--text-lg); line-height: 1.8;">
+          Our art program fosters joy, confidence, and creative self-expression rooted in 
+          culture through Latin American Folk dance. Students build confidence, discipline, 
+          and pride in their heritage while performing in community events throughout the year.
         </p>
         
-        <div style="background: var(--color-surface-soft); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--color-border-subtle);">
-          <h4 style="margin-bottom: 1rem; font-size: var(--text-md);">Program Details</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem;">
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+        <div class="card mt-4" style="background: var(--color-primary-soft); border: none;">
+          <h4 style="margin-bottom: 1rem; color: var(--color-primary-dark);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 8px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Program Details
+          </h4>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(206, 50, 91, 0.1); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
               <span>Girls ages 11-18 years old</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(206, 50, 91, 0.1); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Mondays at 7:00pm</span>
+              <span>Mondays at 7:00 PM</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
+            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
               <span>Auditions for 2026 begin in May</span>
-            </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-dark)" stroke-width="2">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-              <span>Performance opportunities throughout the year</span>
             </li>
           </ul>
         </div>
         
-        <div class="flex" style="gap: 1rem;">
-          <a href="/signup" class="btn btn-primary">Enroll Now</a>
-          <a href="/donate" class="btn btn-outline">Support This Program</a>
+        <div class="flex mt-4" style="gap: 1rem;">
+          <a href="/signup" class="btn btn-primary btn-lg">Enroll Now</a>
+          <a href="/donate" class="btn btn-outline btn-lg">Support This Program</a>
         </div>
       </div>
     </div>
@@ -140,75 +172,81 @@
 </section>
 
 <!-- Mariachi -->
-<section id="mariachi" class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(154, 181, 157, 0.1) 50%, transparent 100%); scroll-margin-top: 100px;">
+<section id="mariachi" class="section" style="background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 100%); scroll-margin-top: 100px;">
   <div class="container">
     <div class="grid" style="grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center;">
-      <div>
+      <div class="program-detail-content">
         <span class="badge badge--accent mb-2">Music</span>
         <h2 class="heading-decorated">Mariachi</h2>
-        <p class="text-muted mt-4" style="font-size: var(--text-lg);">
-          We love mariachi music so we have created a female mariachi band! 
-          Our mariachi program relaunched in spring of 2025. All levels of music 
-          proficiency are welcome!
+        
+        <p class="mt-3" style="font-size: var(--text-lg); line-height: 1.8;">
+          We love mariachi music, so we've created a female mariachi band! Our mariachi 
+          program relaunched in spring of 2025. All levels of music proficiency are welcome—
+          whether you're a beginner or have experience, join us!
         </p>
         
-        <div style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--color-border-subtle); box-shadow: var(--shadow-soft);">
-          <h4 style="margin-bottom: 1rem; font-size: var(--text-md);">Program Details</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem;">
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+        <div class="card mt-4" style="background: var(--color-accent-soft); border: none;">
+          <h4 style="margin-bottom: 1rem; color: var(--color-accent-dark);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 8px;">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+            Program Details
+          </h4>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(122, 154, 125, 0.2); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
               <span>Girls ages 11-18</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(122, 154, 125, 0.2); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Mondays from 5:30pm - 6:45pm</span>
+              <span>Mondays from 5:30 PM - 6:45 PM</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-                <line x1="12" y1="1" x2="12" y2="23"></line>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-              </svg>
-              <span>Annual program fee: $45 (Venmo or cash)</span>
-            </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-                <path d="M9 18V5l12-2v13"></path>
-                <circle cx="6" cy="18" r="3"></circle>
-                <circle cx="18" cy="16" r="3"></circle>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(122, 154, 125, 0.2); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
               <span>Instruments: violin, trumpet, guitarrón, vihuela, guitar</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-dark)" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>All levels welcome; instruments may be available to borrow</span>
+              <span>Annual program fee: $45 (Venmo or cash)</span>
             </li>
           </ul>
         </div>
         
-        <div class="flex" style="gap: 1rem;">
-          <a href="/signup" class="btn btn-secondary">Enroll Now</a>
-          <a href="/donate" class="btn btn-outline">Support This Program</a>
+        <div class="flex mt-4" style="gap: 1rem;">
+          <a href="/signup" class="btn btn-secondary btn-lg">Enroll Now</a>
+          <a href="/donate" class="btn btn-outline btn-lg">Support This Program</a>
         </div>
       </div>
       
-      <div style="position: relative;">
+      <div class="program-detail-media" style="position: relative;">
         <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-large);">
-          <img src="/images/mariachi/playing.jpeg" alt="Mariachi students playing instruments" style="width: 100%; height: auto;" />
+          <img 
+            src="/images/mariachi/playing.jpg" 
+            alt="Mariachi students playing instruments" 
+            style="width: 100%; height: 450px; object-fit: cover;"
+          />
         </div>
-        <!-- Floating accent card -->
-        <div class="card" style="position: absolute; bottom: -20px; left: -20px; padding: 1rem 1.5rem; background: var(--color-accent-dark); color: white; border-radius: var(--radius-lg);">
-          <div style="font-size: var(--text-2xl); font-weight: 700;">$45</div>
-          <div style="font-size: var(--text-sm); opacity: 0.9;">per year</div>
-        </div>
+        <!-- Decorative accent -->
+        <div style="
+          position: absolute;
+          top: -20px;
+          left: -20px;
+          width: 100px;
+          height: 100px;
+          background: var(--color-accent-soft);
+          border-radius: var(--radius-xl);
+          z-index: -1;
+        "></div>
       </div>
     </div>
   </div>
@@ -218,73 +256,77 @@
 <section id="steam" class="section" style="scroll-margin-top: 100px;">
   <div class="container">
     <div class="grid" style="grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center;">
-      <div style="position: relative;">
+      <div class="program-detail-media" style="position: relative;">
         <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-large);">
-          <img src="/images/steam/stem2.jpg" alt="Girls participating in STEAM workshop" style="width: 100%; height: auto;" />
+          <img 
+            src="/images/steam/stem2.jpg" 
+            alt="Girls participating in STEAM workshop" 
+            style="width: 100%; height: 450px; object-fit: cover;"
+          />
         </div>
-        <!-- Partner badges -->
-        <div style="position: absolute; bottom: -15px; right: 20px; display: flex; gap: 0.5rem;">
-          <div class="card" style="padding: 0.5rem 1rem; font-size: var(--text-xs); font-weight: 600;">UVU</div>
-          <div class="card" style="padding: 0.5rem 1rem; font-size: var(--text-xs); font-weight: 600;">BYU</div>
-          <div class="card" style="padding: 0.5rem 1rem; font-size: var(--text-xs); font-weight: 600;">Thanksgiving Point</div>
-        </div>
+        <!-- Decorative accent -->
+        <div style="
+          position: absolute;
+          bottom: -15px;
+          left: -15px;
+          width: 90px;
+          height: 90px;
+          background: var(--color-dusty-blue);
+          opacity: 0.3;
+          border-radius: var(--radius-xl);
+          z-index: -1;
+        "></div>
       </div>
       
-      <div>
-        <span class="badge" style="background: rgba(153, 183, 198, 0.2); color: var(--color-dusty-blue);">Science & Technology</span>
-        <h2 class="heading-decorated mt-2">STEAM Workshops</h2>
-        <p class="text-muted mt-4" style="font-size: var(--text-lg);">
-          Virtual and in-person STEAM (science, technology, engineering, art, and math) 
-          workshops to develop and guide participant inquiry, discussion, and critical 
-          thinking of STEAM related careers.
+      <div class="program-detail-content">
+        <span class="badge badge--neutral mb-2">Education</span>
+        <h2 class="heading-decorated">STEAM Workshops</h2>
+        
+        <p class="mt-3" style="font-size: var(--text-lg); line-height: 1.8;">
+          We facilitate virtual and in-person STEAM (science, technology, engineering, art, 
+          and math) workshops to develop and guide participant inquiry, discussion, and 
+          critical thinking of STEAM-related careers.
         </p>
         
-        <div style="background: var(--color-surface-soft); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--color-border-subtle);">
-          <h4 style="margin-bottom: 1rem; font-size: var(--text-md);">What You'll Experience</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem;">
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
+        <p class="text-muted" style="line-height: 1.8;">
+          Our workshops are produced in partnership with <strong>Thanksgiving Point</strong>, 
+          <strong>Utah Valley University (UVU)</strong>, and <strong>Brigham Young University (BYU)</strong>.
+        </p>
+        
+        <div class="card mt-4" style="background: rgba(153, 183, 198, 0.15); border: none;">
+          <h4 style="margin-bottom: 1rem; color: var(--color-dusty-blue);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 8px;">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            What You'll Experience
+          </h4>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(153, 183, 198, 0.3); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-dusty-blue)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Hands-on experiments and projects</span>
+              <span>Hands-on and discussion-based workshops</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(153, 183, 198, 0.3); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-dusty-blue)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Virtual and in-person options</span>
+              <span>Virtual and in-person experiences</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-dusty-blue)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Latina mentors and guest speakers</span>
-            </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-dusty-blue)" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-              </svg>
-              <span>Career exploration and guidance</span>
+              <span>Guest speakers and community partners</span>
             </li>
           </ul>
         </div>
         
-        <p class="text-muted" style="font-size: var(--text-sm);">
-          Workshops produced in partnership with Thanksgiving Point, UVU, and BYU.
-        </p>
-        
-        <div class="flex" style="gap: 1rem; margin-top: 1.5rem;">
-          <a href="/signup" class="btn btn-primary">Join a Workshop</a>
-          <a href="/donate" class="btn btn-outline">Support STEAM</a>
+        <div class="flex mt-4" style="gap: 1rem;">
+          <a href="/events" class="btn btn-primary btn-lg">Find a Workshop</a>
+          <a href="/donate" class="btn btn-outline btn-lg">Support STEAM</a>
         </div>
       </div>
     </div>
@@ -292,174 +334,155 @@
 </section>
 
 <!-- Summit + Educational Pathways -->
-<section id="summit" class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(151, 142, 196, 0.1) 50%, transparent 100%); scroll-margin-top: 100px;">
+<section id="summit" class="section" style="background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%); scroll-margin-top: 100px;">
   <div class="container">
     <div class="grid" style="grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center;">
-      <div>
-        <span class="badge" style="background: rgba(151, 142, 196, 0.2); color: var(--color-lavender);">Education</span>
-        <h2 class="heading-decorated mt-2">Summit + Educational Pathways</h2>
-        <p class="text-muted mt-4" style="font-size: var(--text-lg);">
-          The Ella Rises Summit is a day camp packed with activities to give a glimpse 
-          of the Ella Rises Experience: art, STEM, and a focus on education!
+      <div class="program-detail-content">
+        <span class="badge badge--primary mb-2">Experience</span>
+        <h2 class="heading-decorated">Summit + Educational Pathways</h2>
+        
+        <p class="mt-3" style="font-size: var(--text-lg); line-height: 1.8;">
+          The Ella Rises Summit is a day camp packed with activities to give a glimpse of 
+          the Ella Rises Experience: art, STEM, and a focus on education!
         </p>
         
-        <div style="background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--color-border-subtle); box-shadow: var(--shadow-soft);">
-          <h4 style="margin-bottom: 1rem; font-size: var(--text-md);">Summit Experience</h4>
-          <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem;">
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+        <p class="text-muted" style="line-height: 1.8;">
+          We conclude the day camp with a tour of a local university or technical college, 
+          so students can begin to picture themselves on campus and explore their educational future.
+        </p>
+        
+        <div class="card mt-4" style="background: var(--color-primary-soft); border: none;">
+          <h4 style="margin-bottom: 1rem; color: var(--color-primary-dark);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 8px;">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            Program Details
+          </h4>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(206, 50, 91, 0.1); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
               <span>Girls ages 11-18 years old</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(206, 50, 91, 0.1); display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Full day camp experience</span>
+              <span>Day camp format with diverse activities</span>
             </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary-dark)">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
-              <span>Art, STEM, and education activities</span>
-            </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-              </svg>
-              <span>Campus tour of local university or technical college</span>
-            </li>
-            <li style="display: flex; align-items: center; gap: 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-lavender)" stroke-width="2">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-              <span>Mentorship and inspiration</span>
+              <span>Campus tours at local universities or technical colleges</span>
             </li>
           </ul>
         </div>
         
-        <div class="flex" style="gap: 1rem;">
-          <a href="/signup" class="btn btn-primary">Register for Summit</a>
-          <a href="/donate" class="btn btn-outline">Support Pathways</a>
+        <div class="flex mt-4" style="gap: 1rem;">
+          <a href="/events" class="btn btn-primary btn-lg">See Upcoming Summits</a>
+          <a href="/donate" class="btn btn-outline btn-lg">Support Pathways</a>
         </div>
       </div>
       
-      <div style="position: relative;">
+      <div class="program-detail-media" style="position: relative;">
         <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-large);">
-          <img src="/images/steam/summit2.jpg" alt="Summit day camp participants" style="width: 100%; height: auto;" />
+          <img 
+            src="/images/steam/summit2.jpg" 
+            alt="Summit and Educational Pathways day camp" 
+            style="width: 100%; height: 450px; object-fit: cover;"
+          />
         </div>
-        <!-- Quote card -->
-        <div class="card" style="position: absolute; bottom: -30px; left: 20px; right: 20px; padding: 1.25rem; background: var(--color-surface); border-radius: var(--radius-lg);">
-          <p style="font-style: italic; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0;">
-            "We really hope to elevate the higher education attainment rates across the state and beyond."
-          </p>
-          <p style="font-weight: 600; color: var(--color-primary-dark); font-size: var(--text-sm); margin: 0.5rem 0 0;">
-            — Nadia Cates, Founder
-          </p>
-        </div>
+        <!-- Decorative accent -->
+        <div style="
+          position: absolute;
+          top: -20px;
+          right: -20px;
+          width: 110px;
+          height: 110px;
+          background: var(--color-lavender);
+          opacity: 0.25;
+          border-radius: var(--radius-xl);
+          z-index: -1;
+        "></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Weekly Schedule -->
-<section class="section">
+<section class="section" style="background: var(--color-text); color: #ffffff;">
   <div class="container">
     <div class="text-center mb-4">
-      <h2>Weekly Schedule</h2>
-      <p class="text-muted">
-        All programs meet on Mondays in Provo, Utah
+      <h2 style="color: #ffffff;">Weekly Schedule</h2>
+      <p style="color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto;">
+        All programs run on Mondays. Girls are welcome to join at any time and 
+        participate in whichever programs interest them.
       </p>
     </div>
     
-    <div class="card" style="max-width: 700px; margin: 0 auto; overflow: hidden;">
-      <table class="table" style="margin: -1.5rem;">
-        <thead>
-          <tr>
-            <th>Program</th>
-            <th>Time</th>
-            <th>Ages</th>
-            <th>Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span style="font-weight: 600;">Mariachi</span>
-            </td>
-            <td>5:30pm - 6:45pm</td>
-            <td>11-18</td>
-            <td>$45/year</td>
-          </tr>
-          <tr>
-            <td>
-              <span style="font-weight: 600;">Ballet Folklorico</span>
-            </td>
-            <td>7:00pm</td>
-            <td>11-18</td>
-            <td>Free</td>
-          </tr>
-          <tr>
-            <td>
-              <span style="font-weight: 600;">STEAM Workshops</span>
-            </td>
-            <td>Varies</td>
-            <td>11-18</td>
-            <td>Free</td>
-          </tr>
-          <tr>
-            <td>
-              <span style="font-weight: 600;">Summit</span>
-            </td>
-            <td>Day Camp</td>
-            <td>11-18</td>
-            <td>Free</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="grid grid-3" style="gap: 2rem; max-width: 900px; margin: 0 auto;">
+      <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); text-align: center;">
+        <div style="font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary);">5:30 PM</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: var(--text-sm);">to 6:45 PM</div>
+        <h4 style="color: #ffffff; margin-top: 1rem;">Mariachi</h4>
+        <p style="color: rgba(255,255,255,0.6); font-size: var(--text-sm); margin: 0;">
+          Music class for all levels
+        </p>
+      </div>
+      
+      <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); text-align: center;">
+        <div style="font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-accent);">7:00 PM</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: var(--text-sm);">Mondays</div>
+        <h4 style="color: #ffffff; margin-top: 1rem;">Ballet Folklorico</h4>
+        <p style="color: rgba(255,255,255,0.6); font-size: var(--text-sm); margin: 0;">
+          Traditional dance practice
+        </p>
+      </div>
+      
+      <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); text-align: center;">
+        <div style="font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-dusty-blue);">Varies</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: var(--text-sm);">Check Events</div>
+        <h4 style="color: #ffffff; margin-top: 1rem;">STEAM & Summits</h4>
+        <p style="color: rgba(255,255,255,0.6); font-size: var(--text-sm); margin: 0;">
+          Workshops & day camps
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="section" style="background: var(--color-primary-soft); padding: 4rem 0;">
+<!-- Enrollment CTA -->
+<section class="section" style="text-align: center;">
   <div class="container">
-    <div class="text-center" style="max-width: 600px; margin: 0 auto;">
+    <div style="max-width: 600px; margin: 0 auto;">
       <h2>Ready to Rise?</h2>
-      <p class="text-muted mt-2">
-        Enroll your daughter in one or more of our programs and watch her 
-        grow in confidence, connect with her heritage, and prepare for a bright future.
+      <p class="text-muted mt-2 mb-4">
+        Enroll in Ella Rises and participate in our mariachi, ballet folklorico, 
+        and STEAM programs. New participants are welcome to join at any time!
       </p>
-      <div class="flex-center" style="gap: 1rem; margin-top: 2rem;">
+      <div class="flex-center" style="gap: 1rem;">
         <a href="/signup" class="btn btn-primary btn-lg">Enroll Now</a>
-        <a href="/events" class="btn btn-outline btn-lg">View Events Calendar</a>
+        <a href="/events" class="btn btn-outline btn-lg">View Events</a>
       </div>
-      <p class="text-muted mt-3" style="font-size: var(--text-sm);">
-        Questions? Contact us at <a href="mailto:nadia@ellarises.org" style="color: var(--color-primary-dark);">nadia@ellarises.org</a>
-      </p>
     </div>
   </div>
 </section>
 
 <script>
   // Smooth scroll for anchor links
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     });
   });
 </script>

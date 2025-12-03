@@ -1,18 +1,94 @@
 <!-- views/partials/_flash.ejs -->
-<% if (typeof success !== "undefined" && success.length) { %>
-  <% success.forEach(msg => { %>
-    <div class="alert alert-success"><%= msg %></div>
-  <% }) %>
-<% } %>
+<%
+  const flashMessages = typeof messages !== 'undefined' ? messages : {};
+  const successMessages = flashMessages.success || [];
+  const errorMessages = flashMessages.error || [];
+  const infoMessages = flashMessages.info || [];
+%>
 
-<% if (typeof error !== "undefined" && error.length) { %>
-  <% error.forEach(msg => { %>
-    <div class="alert alert-error"><%= msg %></div>
+<% if (successMessages.length || errorMessages.length || infoMessages.length) { %>
+<div class="flash-container" style="position: fixed; top: calc(var(--header-height) + 1rem); right: 1rem; z-index: 1000; max-width: 400px;">
+  <% successMessages.forEach(msg => { %>
+    <div class="alert alert-success animate-fade-in" role="alert">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span><%= msg %></span>
+      <button type="button" class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
   <% }) %>
-<% } %>
+  
+  <% errorMessages.forEach(msg => { %>
+    <div class="alert alert-error animate-fade-in" role="alert">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span><%= msg %></span>
+      <button type="button" class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  <% }) %>
+  
+  <% infoMessages.forEach(msg => { %>
+    <div class="alert alert-info animate-fade-in" role="alert">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      <span><%= msg %></span>
+      <button type="button" class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  <% }) %>
+</div>
 
-<% if (typeof info !== "undefined" && info.length) { %>
-  <% info.forEach(msg => { %>
-    <div class="alert alert-info"><%= msg %></div>
-  <% }) %>
+<style>
+  .flash-container .alert {
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .flash-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+    opacity: 0.6;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .flash-close:hover {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // Auto-dismiss flash messages after 5 seconds
+  setTimeout(() => {
+    document.querySelectorAll('.flash-container .alert').forEach(alert => {
+      alert.style.opacity = '0';
+      alert.style.transform = 'translateX(20px)';
+      alert.style.transition = 'all 0.3s ease-out';
+      setTimeout(() => alert.remove(), 300);
+    });
+  }, 5000);
+</script>
 <% } %>

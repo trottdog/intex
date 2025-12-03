@@ -1,25 +1,37 @@
-<!-- views/layouts/main.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include("../partials/_head") %>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container site-header-inner">
-        <%- include("../partials/_header") %>
-      </div>
-    </header>
-
-    <main style="padding-top: var(--header-height);">
-      <div class="container">
-        <%- include("../partials/_flash") %>
-      </div>
-      <%- body %>
-    </main>
-
-    <%- include("../partials/_footer") %>
-
-    <script src="/js/main.js" defer></script>
-  </body>
+<head>
+  <%- include('../partials/_head') %>
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="sr-only" style="position: absolute; top: -100px; left: 0; background: var(--color-primary-dark); color: #fff; padding: 0.5rem 1rem; z-index: 9999;">
+    Skip to main content
+  </a>
+  
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <%- include('../partials/_header') %>
+    </div>
+  </header>
+  
+  <!-- Flash Messages -->
+  <% if (typeof messages !== 'undefined') { %>
+    <%- include('../partials/_flash', { messages }) %>
+  <% } %>
+  
+  <!-- Main Content -->
+  <main id="main-content">
+    <%- body %>
+  </main>
+  
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <%- include('../partials/_footer') %>
+  </footer>
+  
+  <!-- Main JavaScript -->
+  <script src="/js/main.js"></script>
+</body>
 </html>
