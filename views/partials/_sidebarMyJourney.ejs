@@ -119,13 +119,6 @@
 
 <!-- Quick Actions -->
 <div class="sidebar-actions">
-  <a href="/events" class="btn btn-outline w-full mb-2" style="justify-content: flex-start; gap: 0.5rem;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"></circle>
-      <path d="m21 21-4.35-4.35"></path>
-    </svg>
-    Browse Events
-  </a>
   <form action="/logout" method="POST">
     <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
     <button type="submit" class="btn btn-ghost w-full" style="justify-content: flex-start; gap: 0.5rem; color: var(--color-text-muted);">
